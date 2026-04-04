@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png" />
+  <link rel="manifest" href="favicon_io/site.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Roll Call - Mang'u High School</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --secondary: #10b981;
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --light: #f8fafc;
+      --dark: #1e293b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --radius: 8px;
+    }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+    
+    .card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #0da271;
+      transform: translateY(-2px);
+    }
+    
+    .btn-accent {
+      background-color: var(--accent);
+      color: white;
+    }
+    
+    .btn-accent:hover {
+      background-color: #e58a08;
+      transform: translateY(-2px);
+    }
+    
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-2px);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: all 0.2s;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    .stats-card {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .badge-success {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+    
+    .badge-warning {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+    
+    .badge-danger {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .badge-info {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
+    .student-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      transition: background-color 0.2s;
+    }
+    
+    .student-item:hover {
+      background-color: #f1f5f9;
+    }
+    
+    .report-card {
+      border-left: 4px solid;
+      transition: all 0.3s ease;
+    }
+    
+    .report-card:hover {
+      transform: translateY(-3px);
+    }
+    
+    .report-card-perfect {
+      border-left-color: var(--secondary);
+    }
+    
+    .report-card-absentees {
+      border-left-color: var(--danger);
+    }
+    
+    .scroll-container {
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 #f1f5f9;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    }
+    
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+    }
+    
+    .status-normal { background-color: #10b981; }
+    .status-sick { background-color: #f59e0b; }
+    .status-home { background-color: #3b82f6; }
+    .status-suspended { background-color: #ef4444; }
+  </style>
+</head>
+<body class="p-4">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+          <i class="fas fa-clipboard-list text-blue-600"></i>
+          Roll Call System - Mang'u High School
+        </h1>
+        <p class="text-gray-600 mt-1">Track and manage student attendance efficiently</p>
+      </div>
+      <button onclick="window.location.href='dashboard.html'" class="btn btn-outline">
+        <i class="fas fa-home"></i> Dashboard
+      </button>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="stats-card">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-blue-100">Total Reports</p>
+            <h3 class="text-2xl font-bold" id="total-reports">0</h3>
+          </div>
+          <i class="fas fa-file-alt text-3xl text-blue-200"></i>
+        </div>
+      </div>
+      <div class="stats-card" style="background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-blue-100">Today's Reports</p>
+            <h3 class="text-2xl font-bold" id="today-reports">0</h3>
+          </div>
+          <i class="fas fa-calendar-day text-3xl text-blue-200"></i>
+        </div>
+      </div>
+      <div class="stats-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-blue-100">Classes Tracked</p>
+            <h3 class="text-2xl font-bold" id="classes-tracked">0</h3>
+          </div>
+          <i class="fas fa-school text-3xl text-blue-200"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Roll Call Form Section -->
+      <div class="card">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <i class="fas fa-user-check text-green-500"></i> Take Attendance
+        </h2>
+        
+        <div class="grid grid-cols-1 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Class</label>
+            <select id="roll-class" class="form-control">
+              <option value="">Select Class</option>
+              <option value="Form 2">Form 2</option>
+              <option value="Form 3">Form 3</option>
+              <option value="Form 4">Form 4</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Stream</label>
+            <select id="roll-stream" class="form-control"></select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Teacher Name</label>
+            <input type="text" id="teacher-name" class="form-control" placeholder="Enter your full name" />
+          </div>
+        </div>
+        
+        <button onclick="loadRollCall()" class="btn btn-primary w-full pulse">
+          <i class="fas fa-users"></i> Load Students
+        </button>
+
+        <!-- Student List -->
+        <div id="roll-section" class="hidden mt-6 fade-in">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-gray-700">Student List</h3>
+            <div class="flex gap-2">
+              <button type="button" onclick="checkAll(true)" class="btn btn-secondary text-sm">
+                <i class="fas fa-check-circle"></i> Check All
+              </button>
+              <button type="button" onclick="checkAll(false)" class="btn btn-outline text-sm">
+                <i class="fas fa-times-circle"></i> Uncheck All
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3 p-3 bg-blue-50 rounded-lg">
+            <p class="text-sm text-blue-700 flex items-center gap-2">
+              <i class="fas fa-info-circle"></i>
+              <span>Students with non-Normal status (Sick, Home, Suspended) are automatically marked as absent based on their dashboard status.</span>
+            </p>
+          </div>
+
+          <form id="roll-form">
+            <div id="student-list" class="scroll-container space-y-2 max-h-64 overflow-y-auto border rounded-lg p-3 bg-gray-50"></div>
+            
+            <div class="mt-6 flex justify-end">
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i> Submit Attendance
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Reports Section -->
+      <div class="card">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+          <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-chart-bar text-blue-500"></i> Attendance Reports
+          </h2>
+          <div class="flex gap-2">
+            <button onclick="exportToExcel()" class="btn btn-accent text-sm">
+              <i class="fas fa-file-export"></i> Export Excel
+            </button>
+            <button onclick="printSelectedReports()" class="btn btn-primary text-sm">
+              <i class="fas fa-print"></i> Print Selected
+            </button>
+          </div>
+        </div>
+
+        <!-- Report Filters -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Filter by Form</label>
+            <select id="filter-form" class="form-control">
+              <option value="">All Forms</option>
+              <option value="Form 2">Form 2</option>
+              <option value="Form 3">Form 3</option>
+              <option value="Form 4">Form 4</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Filter by Stream</label>
+            <select id="filter-stream" class="form-control">
+              <option value="">All Streams</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Reports Container -->
+        <div id="reports-container" class="scroll-container space-y-4 max-h-96 overflow-y-auto pr-2"></div>
+        
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-8">
+          <i class="fas fa-clipboard-list text-4xl text-gray-300 mb-3"></i>
+          <h3 class="text-lg font-medium text-gray-500">No attendance reports yet</h3>
+          <p class="text-gray-400 mt-1">Take attendance to see reports here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const streams = [
+      "Amherst", "Berkley", "Cambridge", "Cape", "Chicago", "Columbia",
+      "Cornell", "Dartmouth", "Dayton", "Duke", "Edinburgh", "Harvard",
+      "Hopkins", "MIT", "Michigan", "Oxford", "Pittsburgh", "Princeton",
+      "Stanford", "Yale", "Zurich"
+    ].sort();
+
+    // Initialize stream dropdowns
+    const streamSelect = document.getElementById("roll-stream");
+    const filterStream = document.getElementById("filter-stream");
+    
+    streams.forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s;
+      opt.textContent = s;
+      streamSelect.appendChild(opt.cloneNode(true));
+      filterStream.appendChild(opt);
+    });
+
+    // Get students from localStorage
+    function getStudents() {
+      return JSON.parse(localStorage.getItem("students") || "[]");
+    }
+
+    function updateStats() {
+      const reports = JSON.parse(localStorage.getItem("rollCallReports") || "[]");
+      document.getElementById("total-reports").textContent = reports.length;
+      
+      // Calculate today's reports
+      const today = new Date().toLocaleDateString();
+      const todayReports = reports.filter(r => {
+        const reportDate = new Date(r.date).toLocaleDateString();
+        return reportDate === today;
+      });
+      document.getElementById("today-reports").textContent = todayReports.length;
+      
+      // Calculate unique classes
+      const uniqueClasses = [...new Set(reports.map(r => r.class))];
+      document.getElementById("classes-tracked").textContent = uniqueClasses.length;
+    }
+
+    function loadRollCall() {
+      const cls = document.getElementById("roll-class").value;
+      const stream = document.getElementById("roll-stream").value;
+      const teacher = document.getElementById("teacher-name").value.trim();
+      const fullClass = `${cls} ${stream}`;
+
+      if (!cls || !stream || !teacher) {
+        alert("Please select class, stream, and enter teacher name.");
+        return;
+      }
+
+      const students = getStudents();
+      const classStudents = students.filter(s => s.class === fullClass);
+      if (classStudents.length === 0) {
+        alert("No students found for this class.");
+        return;
+      }
+
+      const list = document.getElementById("student-list");
+      list.innerHTML = "";
+      
+      classStudents.forEach(s => {
+        // ✅ CRITICAL: Check student status from dashboard
+        // If status is not "Normal", automatically mark as absent
+        const isPresent = s.status === "Normal";
+        
+        const div = document.createElement("div");
+        div.className = "student-item";
+        div.innerHTML = `
+          <input type="checkbox" class="student-checkbox rounded text-blue-600 focus:ring-blue-500" 
+                 value="${s.admissionNo}" ${isPresent ? 'checked' : ''} 
+                 ${!isPresent ? 'disabled' : ''}>
+          <span class="flex-1">
+            <span class="status-indicator status-${s.status?.toLowerCase() || 'normal'}"></span>
+            ${s.admissionNo} - ${s.name}
+          </span>
+          <span class="badge ${isPresent ? 'badge-success' : 'badge-danger'}">
+            ${isPresent ? 'Present' : 'Absent'}
+          </span>
+          ${!isPresent ? `<span class="badge badge-info text-xs">${s.status}</span>` : ''}
+        `;
+        list.appendChild(div);
+      });
+
+      document.getElementById("roll-section").classList.remove("hidden");
+      
+      // Show status summary
+      const absentCount = classStudents.filter(s => s.status !== "Normal").length;
+      if (absentCount > 0) {
+        showNotification(`${absentCount} students automatically marked as absent due to non-Normal status.`, 'info');
+      }
+    }
+
+    function checkAll(status) {
+      document.querySelectorAll(".student-checkbox:not(:disabled)").forEach(cb => {
+        cb.checked = status;
+        const badge = cb.closest('.student-item').querySelector('.badge');
+        if (status) {
+          badge.className = "badge badge-success";
+          badge.textContent = "Present";
+        } else {
+          badge.className = "badge badge-danger";
+          badge.textContent = "Absent";
+        }
+      });
+    }
+
+    document.getElementById("roll-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const cls = document.getElementById("roll-class").value;
+      const stream = document.getElementById("roll-stream").value;
+      const teacher = document.getElementById("teacher-name").value.trim();
+      const fullClass = `${cls} ${stream}`;
+      const date = new Date().toLocaleString();
+      const checkboxes = document.querySelectorAll(".student-checkbox");
+
+      const expected = checkboxes.length;
+      const present = Array.from(checkboxes).filter(c => c.checked).length;
+      const absent = expected - present;
+      
+      // Get absent student details
+      const absentees = Array.from(checkboxes)
+        .filter(c => !c.checked)
+        .map(c => {
+          const studentItem = c.closest('.student-item');
+          const studentText = studentItem.querySelector('.flex-1').textContent.trim();
+          return studentText.split(' - ')[0]; // Get admission number
+        });
+
+      const record = {
+        class: fullClass,
+        expected,
+        present,
+        absent,
+        absentees,
+        date,
+        teacher,
+        autoAbsent: absentees.length // Track how many were auto-absent
+      };
+
+      const history = JSON.parse(localStorage.getItem("rollCallReports") || "[]");
+      history.push(record);
+      localStorage.setItem("rollCallReports", JSON.stringify(history));
+
+      // Show success message
+      showNotification("Attendance submitted successfully!", 'success');
+      document.getElementById("roll-form").reset();
+      document.getElementById("roll-section").classList.add("hidden");
+      renderReports();
+      updateStats();
+    });
+
+    function renderReports() {
+      const reports = JSON.parse(localStorage.getItem("rollCallReports") || "[]");
+      const container = document.getElementById("reports-container");
+      const emptyState = document.getElementById("empty-state");
+      
+      container.innerHTML = "";
+
+      if (reports.length === 0) {
+        emptyState.classList.remove("hidden");
+        return;
+      } else {
+        emptyState.classList.add("hidden");
+      }
+
+      const formFilter = document.getElementById("filter-form").value;
+      const streamFilter = document.getElementById("filter-stream").value;
+
+      reports.reverse().forEach((r, i) => {
+        if (formFilter && !r.class.startsWith(formFilter)) return;
+        if (streamFilter && !r.class.endsWith(streamFilter)) return;
+
+        const div = document.createElement("div");
+        div.className = `report-card card fade-in ${r.absent > 0 ? 'report-card-absentees' : 'report-card-perfect'}`;
+        
+        div.innerHTML = `
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
+            <div>
+              <h3 class="font-bold text-gray-800 text-lg">${r.class}</h3>
+              <p class="text-sm text-gray-600">${r.date}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-500">Teacher:</span>
+              <span class="font-medium">${r.teacher}</span>
+            </div>
+          </div>
+          
+          <div class="flex flex-wrap gap-3 mb-3">
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-gray-600">Expected:</span>
+              <span class="font-bold">${r.expected}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-gray-600">Present:</span>
+              <span class="font-bold text-green-600">${r.present}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-gray-600">Absent:</span>
+              <span class="font-bold text-red-600">${r.absent}</span>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="text-sm text-gray-600">Attendance:</span>
+              <span class="font-bold">${Math.round((r.present / r.expected) * 100)}%</span>
+            </div>
+            ${r.autoAbsent > 0 ? `
+              <div class="flex items-center gap-1">
+                <span class="text-sm text-blue-600">Auto-Absent:</span>
+                <span class="font-bold text-blue-600">${r.autoAbsent}</span>
+              </div>
+            ` : ''}
+          </div>
+          
+          ${r.absent > 0 ? `
+            <div class="mb-4">
+              <p class="text-sm font-medium text-gray-700 mb-1">Absent Students:</p>
+              <p class="text-sm text-gray-600 bg-red-50 p-2 rounded">${r.absentees.join(", ") || "None"}</p>
+            </div>
+          ` : `
+            <div class="mb-4">
+              <span class="badge badge-success">
+                <i class="fas fa-check mr-1"></i> Perfect Attendance
+              </span>
+            </div>
+          `}
+          
+          <div class="flex flex-wrap gap-2 justify-between items-center">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" class="report-select rounded text-blue-600 focus:ring-blue-500" 
+                     data-class="${r.class}" data-date="${r.date}" />
+              <span class="text-sm text-gray-600">Select for printing</span>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="printReport('${r.class}', '${r.date}')" class="btn btn-primary text-sm">
+                <i class="fas fa-print"></i> Print
+              </button>
+              <button onclick="deleteReport(${reports.length - 1 - i})" class="btn btn-danger text-sm">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function printReport(cls, date) {
+      const w = window.open("", "", "width=800,height=600");
+      const reports = JSON.parse(localStorage.getItem("rollCallReports") || "[]");
+      const report = reports.find(r => r.class === cls && r.date === date);
+      if (!report) {
+        alert("Report not found.");
+        return;
+      }
+
+      w.document.write(`
+        <html>
+          <head>
+            <title>Print Report - ${report.class}</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+              .info { margin-bottom: 20px; }
+              .stats { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+              .stat-item { flex: 1; text-align: center; padding: 10px; border-radius: 5px; min-width: 120px; }
+              .expected { background: #f0f9ff; }
+              .present { background: #f0fdf4; }
+              .absent { background: #fef2f2; }
+              .auto-absent { background: #eff6ff; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <h1>Mang'u High School</h1>
+              <h2>Attendance Report - ${report.class}</h2>
+            </div>
+            
+            <div class="info">
+              <p><strong>Teacher:</strong> ${report.teacher}</p>
+              <p><strong>Date:</strong> ${report.date}</p>
+            </div>
+            
+            <div class="stats">
+              <div class="stat-item expected">
+                <h3>Expected</h3>
+                <p style="font-size: 24px; font-weight: bold;">${report.expected}</p>
+              </div>
+              <div class="stat-item present">
+                <h3>Present</h3>
+                <p style="font-size: 24px; font-weight: bold; color: green;">${report.present}</p>
+              </div>
+              <div class="stat-item absent">
+                <h3>Absent</h3>
+                <p style="font-size: 24px; font-weight: bold; color: red;">${report.absent}</p>
+              </div>
+              ${report.autoAbsent > 0 ? `
+                <div class="stat-item auto-absent">
+                  <h3>Auto-Absent</h3>
+                  <p style="font-size: 24px; font-weight: bold; color: blue;">${report.autoAbsent}</p>
+                </div>
+              ` : ''}
+            </div>
+            
+            <div>
+              <h3>Absent Students:</h3>
+              <p>${report.absentees.join(", ") || "None"}</p>
+              ${report.autoAbsent > 0 ? `
+                <p style="color: #666; font-size: 12px; margin-top: 5px;">
+                  * ${report.autoAbsent} students automatically marked absent due to leave status
+                </p>
+              ` : ''}
+            </div>
+          </body>
+        </html>
+      `);
+      w.document.close();
+      w.print();
+    }
+
+    function printSelectedReports() {
+      const checkboxes = document.querySelectorAll(".report-select:checked");
+      if (checkboxes.length === 0) {
+        alert("Please select at least one report to print.");
+        return;
+      }
+
+      const reports = JSON.parse(localStorage.getItem("rollCallReports") || "[]");
+      const selectedData = [];
+
+      checkboxes.forEach(cb => {
+        const cls = cb.dataset.class;
+        const date = cb.dataset.date;
+        const report = reports.find(r => r.class === cls && r.date === date);
+        if (report) selectedData.push(report);
+      });
+
+      if (selectedData.length === 0) {
+        alert("Selected reports not found.");
+        return;
+      }
+
+      const printWindow = window.open("", "", "width=800,height=600");
+      let content = `
+        <html>
+          <head>
+            <title>Print Reports - Mang'u High School</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+              .report { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #ddd; }
+              .stats { display: flex; gap: 20px; margin-bottom: 10px; flex-wrap: wrap; }
+              .stat-item { flex: 1; text-align: center; padding: 10px; border-radius: 5px; min-width: 120px; }
+              .expected { background: #f0f9ff; }
+              .present { background: #f0fdf4; }
+              .absent { background: #fef2f2; }
+              .auto-absent { background: #eff6ff; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <h1>Mang'u High School</h1>
+              <h2>Attendance Reports</h2>
+            </div>
+      `;
+      
+      selectedData.forEach(report => {
+        content += `
+          <div class="report">
+            <h3>${report.class} - ${report.date}</h3>
+            <p><strong>Teacher:</strong> ${report.teacher}</p>
+            
+            <div class="stats">
+              <div class="stat-item expected">
+                <h4>Expected</h4>
+                <p style="font-size: 20px; font-weight: bold;">${report.expected}</p>
+              </div>
+              <div class="stat-item present">
+                <h4>Present</h4>
+                <p style="font-size: 20px; font-weight: bold; color: green;">${report.present}</p>
+              </div>
+              <div class="stat-item absent">
+                <h4>Absent</h4>
+                <p style="font-size: 20px; font-weight: bold; color: red;">${report.absent}</p>
+              </div>
+              ${report.autoAbsent > 0 ? `
+                <div class="stat-item auto-absent">
+                  <h4>Auto-Absent</h4>
+                  <p style="font-size: 20px; font-weight: bold; color: blue;">${report.autoAbsent}</p>
+                </div>
+              ` : ''}
+            </div>
+            
+            <div>
+              <h4>Absent Students:</h4>
+              <p>${report.absentees.join(", ") || "None"}</p>
+              ${report.autoAbsent > 0 ? `
+                <p style="color: #666; font-size: 12px; margin-top: 5px;">
+                  * ${report.autoAbsent} students automatically marked absent due to leave status
+                </p>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      });
+      
+      content += `</body></html>`;
+      printWindow.document.write(content);
+      printWindow.document.close();
+      printWindow.print();
+    }
+
+    function deleteReport(index) {
+      if (!confirm("Are you sure you want to delete this report? This action cannot be undone.")) return;
+      const reports = JSON.parse(localStorage.getItem("rollCallReports") || "[]");
+      reports.splice(index, 1);
+      localStorage.setItem("rollCallReports", JSON.stringify(reports));
+      renderReports();
+      updateStats();
+    }
+
+    function exportToExcel() {
+      const reports = JSON.parse(localStorage.getItem("rollCallReports") || "[]");
+      if (reports.length === 0) {
+        alert("No reports to export.");
+        return;
+      }
+
+      const data = reports.map(r => ({
+        Class: r.class,
+        Date: r.date,
+        Teacher: r.teacher,
+        Expected: r.expected,
+        Present: r.present,
+        Absent: r.absent,
+        'Auto-Absent': r.autoAbsent || 0,
+        Attendance: `${Math.round((r.present / r.expected) * 100)}%`,
+        Absentees: r.absentees.join(", ") || "None"
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "AttendanceReports");
+
+      XLSX.writeFile(workbook, "Mangu_Attendance_Reports.xlsx");
+    }
+
+    // Show notification function
+    function showNotification(message, type = 'success') {
+      // Create notification element if it doesn't exist
+      let notification = document.getElementById('custom-notification');
+      if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'custom-notification';
+        notification.className = 'fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white max-w-sm';
+        document.body.appendChild(notification);
+      }
+
+      // Set notification style based on type
+      const colors = {
+        success: 'bg-green-500',
+        error: 'bg-red-500',
+        info: 'bg-blue-500',
+        warning: 'bg-yellow-500'
+      };
+
+      notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white max-w-sm ${colors[type] || colors.success}`;
+      notification.innerHTML = `
+        <div class="flex items-center gap-2">
+          <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      notification.style.display = 'block';
+
+      // Auto-hide after 4 seconds
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 4000);
+    }
+
+    // Check authentication (both teachers and admins can access)
+    if (localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    // Initialize the page
+    window.onload = function() {
+      renderReports();
+      updateStats();
+    };
+    
+    document.getElementById("filter-form").addEventListener("change", renderReports);
+    document.getElementById("filter-stream").addEventListener("change", renderReports);
+  </script>
+</body>
+</html>

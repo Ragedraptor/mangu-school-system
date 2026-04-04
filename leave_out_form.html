@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leave Request - Mang'u High School</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png" />
+  <link rel="manifest" href="favicon_io/site.webmanifest" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- External Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background-color: #1b263b;
+      color: white;
+      padding: 25px;
+      text-align: center;
+      border-bottom: 4px solid #4CAF50;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: #0077b6;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #005b8a;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid #4CAF50;
+      color: #4CAF50;
+    }
+
+    .btn-outline:hover {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .form-input:read-only {
+      background-color: #f8f9fa;
+      color: #6c757d;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .approval-section {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #4CAF50;
+    }
+
+    .approval-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .signature-box {
+      border-bottom: 2px solid #ccc;
+      height: 40px;
+      margin-top: 10px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .signature-label {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .student-info-card {
+      background-color: #e8f5e9;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-left: 4px solid #4CAF50;
+      display: none;
+    }
+
+    .student-info-card h3 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      color: #2e7d32;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 8px;
+    }
+
+    .info-label {
+      font-weight: 500;
+      color: #555;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 6px;
+      color: white;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .notification.success {
+      background-color: #28a745;
+    }
+
+    .notification.error {
+      background-color: #dc3545;
+    }
+
+    /* Print area style */
+    #print-area {
+      display: none;
+      background: white;
+      padding: 30px;
+      max-width: 700px;
+      margin: auto;
+      color: black;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .stamp-space {
+      border: 2px dashed #aaa;
+      height: 80px;
+      width: 160px;
+      margin-top: 20px;
+      text-align: center;
+      line-height: 80px;
+      color: #777;
+      font-style: italic;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .approval-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-buttons {
+        flex-direction: column;
+      }
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="text-3xl font-bold">Leave Request Form</h1>
+      <p class="mt-2 opacity-90">Mang'u High School - Student Leave Management</p>
+    </div>
+
+    <div class="content">
+      <div class="nav-buttons">
+        <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+          <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <button class="btn btn-outline" onclick="window.location.href='view_reports.html'">
+          <i class="fas fa-list"></i> View Leave Reports
+        </button>
+      </div>
+
+      <!-- Student Info Card -->
+      <div id="student-info-card" class="student-info-card">
+        <h3><i class="fas fa-user-graduate"></i> Student Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Name:</span>
+            <span id="info-name">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Admission No:</span>
+            <span id="info-admission">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Class:</span>
+            <span id="info-class">-</span>
+          </div>
+        </div>
+      </div>
+
+      <form id="leave-request-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="admission-no">
+              <i class="fas fa-id-card"></i>Admission Number
+            </label>
+            <input type="text" id="admission-no" class="form-input" required placeholder="Enter student admission number" />
+            <p class="text-sm text-gray-500 mt-1">Start typing to auto-fill student details</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="name">
+              <i class="fas fa-user"></i>Full Name
+            </label>
+            <input type="text" id="name" class="form-input" required readonly placeholder="Student name will auto-fill" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="student-class">
+              <i class="fas fa-graduation-cap"></i>Class
+            </label>
+            <input type="text" id="student-class" class="form-input" required readonly placeholder="Class will auto-fill" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact">
+              <i class="fas fa-phone"></i>Contact Information
+            </label>
+            <input type="text" id="contact" class="form-input" required placeholder="Parent/Guardian phone number" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="leave-type">
+              <i class="fas fa-clipboard-list"></i>Type of Leave
+            </label>
+            <select id="leave-type" class="form-select" required>
+              <option value="">-- Select Type --</option>
+              <option value="Medical">Medical Leave</option>
+              <option value="Personal">Personal Leave</option>
+              <option value="Suspension">Suspension</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="start-date">
+              <i class="fas fa-calendar-alt"></i>Start Date
+            </label>
+            <input type="date" id="start-date" class="form-input" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="end-date">
+              <i class="fas fa-calendar-alt"></i>End Date
+            </label>
+            <input type="date" id="end-date" class="form-input" required />
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label" for="reason">
+            <i class="fas fa-comment-alt"></i>Reason for Leave
+          </label>
+          <textarea id="reason" class="form-textarea" rows="4" required placeholder="Please provide detailed reason for leave request..."></textarea>
+        </div>
+
+        <div class="approval-section">
+          <h3 class="text-lg font-semibold mb-4"><i class="fas fa-check-circle"></i> Approval Section</h3>
+          <div class="approval-grid">
+            <div>
+              <label class="form-label">Parent/Guardian Approval</label>
+              <div class="signature-box"></div>
+              <div class="signature-label">Signature</div>
+            </div>
+            <div>
+              <label class="form-label">School Administration Approval</label>
+              <div class="signature-box"></div>
+              <div class="signature-label">Signature & Stamp</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Submit Leave Request
+          </button>
+          <button type="button" class="btn btn-outline" onclick="printLeaveForm()">
+            <i class="fas fa-print"></i> Print Leave Form
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="clearForm()">
+            <i class="fas fa-redo"></i> Clear Form
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Hidden print area -->
+  <div id="print-area">
+    <div style="text-align:center; margin-bottom: 30px;">
+      <h2 style="color:#1b263b; margin-bottom: 5px;">Mang'u High School</h2>
+      <h3 style="color:#4CAF50; margin-top: 0;">Leave Authorization Letter</h3>
+    </div>
+    <div id="print-content" style="line-height: 1.6;"></div>
+    <div style="margin-top: 40px;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <div>
+          <div style="border-bottom: 1px solid #000; width: 200px; height: 30px;"></div>
+          <div>Parent/Guardian Signature</div>
+        </div>
+        <div>
+          <div style="border-bottom: 1px solid #000; width: 200px; height: 30px;"></div>
+          <div>School Administration</div>
+        </div>
+      </div>
+      <div class="stamp-space">Official Stamp Here</div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // Show notification function
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.style.display = 'block';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 4000);
+    }
+
+    // Function to update student status when leave is submitted
+    function updateStudentStatus(admissionNo, leaveType) {
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      const studentIndex = students.findIndex(s => s.admissionNo === admissionNo);
+      
+      if (studentIndex !== -1) {
+        // Set student status based on leave type
+        let newStatus = "Normal"; // Default
+        
+        if (leaveType === "Medical") {
+          newStatus = "Sick";
+        } else if (leaveType === "Personal") {
+          newStatus = "Home";
+        } else if (leaveType === "Suspension") {
+          newStatus = "Suspended";
+        }
+        
+        // Update student status
+        students[studentIndex].status = newStatus;
+        students[studentIndex].lastUpdated = new Date().toISOString().split('T')[0];
+        
+        // Save updated student data
+        localStorage.setItem("students", JSON.stringify(students));
+        
+        console.log(`Student ${admissionNo} status automatically updated to: ${newStatus}`);
+        return newStatus;
+      }
+      return null;
+    }
+
+    // Auto-fill student info with debouncing
+    let searchTimeout;
+    document.getElementById("admission-no").addEventListener("input", function () {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const admissionNo = this.value.trim();
+        const students = JSON.parse(localStorage.getItem("students")) || [];
+        const student = students.find(s => s.admissionNo === admissionNo);
+
+        const studentInfoCard = document.getElementById("student-info-card");
+        
+        if (student) {
+          // Auto-fill all student information
+          document.getElementById("name").value = student.name;
+          document.getElementById("student-class").value = student.class;
+          
+          // Update info card (removed stream display)
+          document.getElementById("info-name").textContent = student.name;
+          document.getElementById("info-admission").textContent = student.admissionNo;
+          document.getElementById("info-class").textContent = student.class;
+          studentInfoCard.style.display = 'block';
+          
+          showNotification(`Student information loaded: ${student.name}`, 'success');
+        } else {
+          // Clear all fields if student not found
+          document.getElementById("name").value = "";
+          document.getElementById("student-class").value = "";
+          studentInfoCard.style.display = 'none';
+          
+          if (admissionNo.length > 0) {
+            showNotification("Student not found. Please check admission number.", "error");
+          }
+        }
+      }, 300);
+    });
+
+    // Form validation
+    function validateForm() {
+      const admissionNo = document.getElementById("admission-no").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const studentClass = document.getElementById("student-class").value;
+      const contact = document.getElementById("contact").value.trim();
+      const leaveType = document.getElementById("leave-type").value;
+      const startDate = document.getElementById("start-date").value;
+      const endDate = document.getElementById("end-date").value;
+      const reason = document.getElementById("reason").value.trim();
+
+      // Check required fields
+      if (!admissionNo || !name || !studentClass || !contact || !leaveType || !startDate || !endDate || !reason) {
+        showNotification("Please fill in all required fields.", "error");
+        return false;
+      }
+
+      // Check date validity
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      if (start >= end) {
+        showNotification("End date must be after start date.", "error");
+        return false;
+      }
+      
+      if (start < today) {
+        showNotification("Start date cannot be in the past.", "error");
+        return false;
+      }
+      
+      return true;
+    }
+
+    // Save leave request
+    document.getElementById("leave-request-form").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      if (!validateForm()) {
+        return;
+      }
+
+      const leave = {
+        admissionNo: document.getElementById("admission-no").value,
+        name: document.getElementById("name").value,
+        class: document.getElementById("student-class").value,
+        contact: document.getElementById("contact").value,
+        leaveType: document.getElementById("leave-type").value,
+        startDate: document.getElementById("start-date").value,
+        endDate: document.getElementById("end-date").value,
+        reason: document.getElementById("reason").value,
+        dateSubmitted: new Date().toISOString(),
+        status: "pending" // Automatically set to pending
+      };
+
+      // Get existing leaves or initialize empty array
+      let leaves = [];
+      try {
+        const storedLeaves = localStorage.getItem("leaves");
+        leaves = storedLeaves ? JSON.parse(storedLeaves) : [];
+      } catch (e) {
+        console.error("Error parsing leaves from localStorage:", e);
+        leaves = [];
+      }
+
+      // Add new leave
+      leaves.push(leave);
+      
+      // Save back to localStorage
+      try {
+        localStorage.setItem("leaves", JSON.stringify(leaves));
+        
+        // ✅ CRITICAL FIX: Update student status automatically
+        const newStatus = updateStudentStatus(leave.admissionNo, leave.leaveType);
+        
+        if (newStatus) {
+          showNotification(`Leave request submitted successfully! Student status updated to: ${newStatus}`);
+        } else {
+          showNotification("Leave request submitted successfully! Status: Pending");
+        }
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+          window.location.href = "view_reports.html";
+        }, 1500);
+      } catch (e) {
+        console.error("Error saving leave to localStorage:", e);
+        showNotification("Error saving leave request. Please try again.", "error");
+      }
+    });
+
+    // Print Leave Form
+    function printLeaveForm() {
+      const name = document.getElementById("name").value;
+      const admissionNo = document.getElementById("admission-no").value;
+      const cls = document.getElementById("student-class").value;
+      const reason = document.getElementById("reason").value;
+      const startDate = document.getElementById("start-date").value;
+      const endDate = document.getElementById("end-date").value;
+      const leaveType = document.getElementById("leave-type").value;
+      const contact = document.getElementById("contact").value;
+
+      // Validate required fields for printing
+      if (!name || !admissionNo) {
+        showNotification("Please fill in student information first.", "error");
+        return;
+      }
+
+      const formattedStartDate = new Date(startDate).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      
+      const formattedEndDate = new Date(endDate).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      const content = `
+        <p>Date: <strong>${new Date().toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}</strong></p>
+        
+        <p>To: The Parent/Guardian of,</p>
+        
+        <p><strong>${name}</strong><br>
+        Admission No: <strong>${admissionNo}</strong><br>
+        Class: <strong>${cls}</strong><br>
+        Contact: <strong>${contact}</strong></p>
+        
+        <p>Dear Parent/Guardian,</p>
+        
+        <p>This is to inform you that your son, <strong>${name}</strong>, has requested <strong>${leaveType}</strong> leave.</p>
+        
+        <p><strong>Requested Leave Duration:</strong> From <strong>${formattedStartDate}</strong> to <strong>${formattedEndDate}</strong>.</p>
+        
+        <p><strong>Reason:</strong> ${reason}</p>
+        
+        <p><strong>Status:</strong> <span style="color: #ff9800; font-weight: bold;">PENDING APPROVAL</span></p>
+        
+        <p>Please ensure your son returns to school promptly on the specified end date if approved. Failure to do so may result in disciplinary action.</p>
+        
+        <p>Thank you for your cooperation.</p>
+        
+        <p>Sincerely,<br>
+        <strong>School Administration</strong><br>
+        Mang'u High School</p>
+      `;
+      
+      document.getElementById("print-content").innerHTML = content;
+
+      const printArea = document.getElementById("print-area");
+      printArea.style.display = "block";
+      
+      // Use setTimeout to ensure the content is rendered before printing
+      setTimeout(() => {
+        window.print();
+        // Hide print area after printing
+        setTimeout(() => {
+          printArea.style.display = "none";
+        }, 500);
+      }, 500);
+    }
+
+    // Clear form function
+    function clearForm() {
+      document.getElementById("leave-request-form").reset();
+      document.getElementById("student-info-card").style.display = "none";
+      showNotification("Form cleared successfully.");
+    }
+
+    // Set minimum date to today for start date
+    document.addEventListener('DOMContentLoaded', function() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("start-date").min = today;
+      document.getElementById("end-date").min = today;
+      
+      // Update end date min when start date changes
+      document.getElementById("start-date").addEventListener('change', function() {
+        document.getElementById("end-date").min = this.value;
+      });
+
+      // Initialize sample data if not exists
+      if (!localStorage.getItem("students")) {
+        const students = [
+          { admissionNo: "26506", name: "KAROBIA HANS MBURU", class: "Form 3 Edinburgh", status: "Normal", lastUpdated: new Date().toISOString().split('T')[0] },
+          { admissionNo: "26528", name: "NAJIBU BIKORWAMUKAMA", class: "Form 3 Cornell", status: "Normal", lastUpdated: new Date().toISOString().split('T')[0] },
+          { admissionNo: "27796", name: "FABIAN DMITRY MEDVEDEV", class: "Form 2 Columbia", status: "Normal", lastUpdated: new Date().toISOString().split('T')[0] }
+        ];
+        localStorage.setItem("students", JSON.stringify(students));
+      }
+    });
+  </script>
+</body>
+</html>

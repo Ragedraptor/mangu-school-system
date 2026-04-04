@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Welcome to the MHS website, your go-to resource for information and updates.">
+  <meta name="keywords" content="MHS website, MHS, education, resources, dining hall, dashboard">
+  <title>Mang'u High School - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="android-chrome-512x512" type="image/png" sizes="32x32" href="favicon_io/android-chrome-512x512.png">
+  <link rel="android-chrome-192x192" href="favicon_io/android-chrome-192x192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8fafc;
+      color: #334155;
+    }
+
+    .dashboard {
+      display: block;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      background-color: white;
+      margin: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      border-bottom: 1px solid #e2e8f0;
+      padding: 14px 16px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1e40af;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      text-align: center;
+      flex-grow: 1;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0 20px;
+    }
+
+    .header .icon-button {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.25rem;
+      margin-left: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .header .icon-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .header button {
+      background-color: #dc2626;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.3s;
+      font-weight: 500;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header button:hover {
+      background-color: #b91c1c;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 24px 0;
+      gap: 16px;
+    }
+
+    .stat-box {
+      background: white;
+      padding: 24px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      flex: 1;
+      min-width: 300px;
+      max-width: 400px;
+      border-top: 4px solid #1e40af;
+      transition: all 0.3s;
+    }
+
+    .stat-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-box h3 {
+      font-size: 1rem;
+      color: #64748b;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .stat-box p {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    .actions {
+      margin: 24px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .actions button {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .actions button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 16px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    .notification.success {
+      background-color: #10b981;
+    }
+
+    .notification.error {
+      background-color: #ef4444;
+    }
+
+    input, select {
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      background-color: white;
+      color: #374151;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    #search-bar {
+      width: 300px;
+      flex-grow: 1;
+    }
+
+    .bg-blue-500 { background-color: #3b82f6; }
+    .bg-green-500 { background-color: #10b981; }
+    .bg-red-500 { background-color: #ef4444; }
+    .bg-yellow-500 { background-color: #f59e0b; }
+    .bg-gray-500 { background-color: #6b7280; }
+
+    .text-white { color: white; }
+
+    button.bg-blue-500:hover { background-color: #2563eb; }
+    button.bg-green-500:hover { background-color: #059669; }
+    button.bg-red-500:hover { background-color: #dc2626; }
+    button.bg-yellow-500:hover { background-color: #d97706; }
+    button.bg-gray-500:hover { background-color: #4b5563; }
+
+    /* Modal styling */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 20px 24px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 0 24px 24px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .modal h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 16px 0;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Status badges */
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-normal {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-sick {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-suspended {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-home {
+      background-color: #e0e7ff;
+      color: #3730a3;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .stats {
+        gap: 12px;
+      }
+      
+      .stat-box {
+        min-width: 250px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        margin: 10px;
+        padding: 16px;
+      }
+      
+      .header {
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 16px;
+      }
+      
+      .header h1 {
+        width: 100%;
+        order: -1;
+        margin-bottom: 0;
+        font-size: 1.5rem;
+      }
+      
+      .stats {
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .stat-box {
+        width: 100%;
+        margin: 0;
+        min-width: auto;
+        max-width: none;
+      }
+      
+      #search-bar {
+        width: 100%;
+        max-width: 100%;
+      }
+      
+      .actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .actions > * {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .header {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 12px;
+      }
+      
+      .header h1 {
+        width: 100%;
+        order: 1;
+        font-size: 1.3rem;
+        margin: 0 0 8px 0;
+      }
+      
+      .header-icons {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        order: 2;
+        flex: 1 1 100%;
+      }
+      
+      .header .icon-button {
+        margin: 0;
+        font-size: 1.1rem;
+        padding: 8px;
+        flex: 0 0 auto;
+      }
+      
+      .header > button:not(.icon-button) {
+        order: 3;
+        width: 100%;
+        margin-top: 8px;
+        padding: 10px;
+        font-size: 0.95rem;
+      }
+      
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      
+      .modal-content {
+        width: 95%;
+        margin: 1rem;
+      }
+    }
+
+    @media (max-width: 375px) {
+      .header .icon-button {
+        font-size: 1rem;
+        padding: 6px;
+      }
+      
+      .header h1 {
+        font-size: 1.1rem;
+      }
+    }
+
+    /* File input styling */
+    .file-input {
+      width: 100%;
+      padding: 8px 0;
+    }
+
+    .file-input::file-selector-button {
+      background: #10b981;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+
+    .file-input:hover::file-selector-button {
+      background: #059669;
+    }
+  </style>
+</head>
+<body>
+  <!-- Dashboard -->
+  <div id="dashboard" class="dashboard">
+    <!-- Header -->
+    <div class="header">
+      <img class="h-16 w-16 rounded-lg" src="mangu_logo.jpg" alt="Mang'u High School Logo" />
+      <h1>MANG'U HIGH SCHOOL</h1>
+      <div class="flex items-center header-icons">
+        <button onclick="openSettings()" class="icon-button" title="Settings">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button onclick="window.location.href='roll_call.html'" class="icon-button" title="Roll Call">
+          <i class="fas fa-clipboard-check"></i>
+        </button>
+        <button onclick="window.location.href='dining_hall.html'" class="icon-button" title="Dining Hall">
+          <i class="fas fa-utensils"></i>
+        </button>
+        <button onclick="window.location.href='flag_student.html'" class="icon-button" title="Flag Student">
+          <i class="fas fa-flag"></i>
+        </button>
+        <button onclick="window.location.href='view_flagged_students.html'" class="icon-button" title="View Flagged Students">
+          <i class="fas fa-eye"></i>
+        </button>
+        <button onclick="window.location.href='leave_out_form.html'" class="icon-button" title="Submit Leave Request">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+        <button onclick="window.location.href='view_reports.html'" class="icon-button" title="View Reports">
+          <i class="fas fa-file"></i>
+        </button>
+        <button id="logout-btn" class="icon-button" title="Logout" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Stats - Total Students & Sent Home -->
+    <div class="stats">
+      <div class="stat-box">
+        <h3>Total Students</h3>
+        <p id="total-students">0</p>
+      </div>
+      <div class="stat-box">
+        <h3>Sent Home</h3>
+        <p id="sent-home-count">0</p>
+      </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="actions">
+      <input type="text" id="search-bar" placeholder="Search by Name or Admission No.">
+      <button onclick="searchStudent()" class="bg-blue-500 text-white">
+        <i class="fas fa-search"></i> Search
+      </button>
+
+      <!-- Class Selection Dropdown -->
+      <select id="class-select" onchange="populateStreamOptions()">
+        <option value="">Select Class</option>
+        <option value="Form 2">Form 2</option>
+        <option value="Form 3">Form 3</option>
+        <option value="Form 4">Form 4</option>
+      </select>
+
+      <!-- Stream Selection Dropdown -->
+      <select id="stream-select">
+        <option value="">Select Stream</option>
+      </select>
+
+      <!-- Print Class List Button -->
+      <button onclick="printClassList()" class="bg-yellow-500 text-white">Print Class List</button>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions">
+      <button onclick="openAddStudentModal()" class="bg-green-500 text-white">
+        <i class="fas fa-user-plus"></i> Add Student
+      </button>
+      <button onclick="deleteStudent()" class="bg-red-500 text-white">
+        <i class="fas fa-user-minus"></i> Delete Student
+      </button>
+      <button id="update-student-btn" class="bg-blue-500 text-white">
+        <i class="fas fa-user-edit"></i> Update Student
+      </button>
+    </div>
+
+    <!-- Student Table -->
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>Admission No.</th>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Status</th>
+            <th>Religious Status</th>
+            <th>Leadership</th>
+            <th>Last Updated</th>
+          </tr>
+        </thead>
+        <tbody id="student-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>System Settings</h2>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Backup and Restore Data</label>
+          <p class="text-sm text-gray-600 mb-4">Create a backup of student data or restore from a previous backup file.</p>
+          <div class="actions">
+            <button onclick="backupData()" class="bg-blue-500 text-white">
+              <i class="fas fa-download"></i> Backup Data
+            </button>
+            <input type="file" id="file-input" accept=".xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="file-input" onchange="restoreData(event)" />
+            <button onclick="document.getElementById('file-input').click();" class="bg-green-500 text-white">
+              <i class="fas fa-upload"></i> Restore Data
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeSettings()" class="bg-gray-500 text-white">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Student Modal -->
+  <div id="add-student-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add New Student</h2>
+      </div>
+      <div class="modal-body">
+        <form id="add-student-form">
+          <div class="form-group">
+            <label for="admission-no">Admission No.</label>
+            <input type="text" id="admission-no" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="student-name">Name</label>
+            <input type="text" id="student-name" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="student-class">Class</label>
+            <select id="student-class" required>
+              <option value="Form 2">Form 2</option>
+              <option value="Form 3">Form 3</option>
+              <option value="Form 4">Form 4</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="student-stream">Stream</label>
+            <select id="student-stream" required></select>
+          </div>
+          
+          <div class="form-group">
+            <label for="Status">Status</label>
+            <select id="Status">
+              <option value="Normal">Normal</option>
+              <option value="Sick">Sick</option>
+              <option value="Suspended">Suspended</option>
+              <option value="Home">Home</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="leadership">Leadership</label>
+            <select id="leadership">
+              <option value="None">None</option>
+              <option value="Captain">Captain</option>
+              <option value="Sportsman">Sportsman</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="religion">Religious Status</label>
+            <select id="religion">
+              <option value="CU">CU</option>
+              <option value="Muslim">Muslim</option>
+              <option value="SDA">SDA</option>
+              <option value="YCS">YCS</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closeAddStudentModal()" class="bg-gray-500 text-white">Cancel</button>
+        <button type="submit" form="add-student-form" class="bg-blue-500 text-white">Save Student</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Student Modal -->
+  <div id="update-student-form" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Update Student Information</h2>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="update-admission-no">Admission Number</label>
+          <input type="text" id="update-admission-no" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="update-class">Class</label>
+          <select id="update-class" onchange="populateUpdateStreamOptions()">
+            <option value="Form 2">Form 2</option>
+            <option value="Form 3">Form 3</option>
+            <option value="Form 4">Form 4</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="update-stream">Stream</label>
+          <select id="update-stream">
+            <option value="">Select Stream</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="update-status">Status</label>
+          <select id="update-status">
+            <option value="Normal">Normal</option>
+            <option value="Sick">Sick</option>
+            <option value="Suspended">Suspended</option>
+            <option value="Home">Home</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="update-religious">Religious Society</label>
+          <select id="update-religious">
+            <option value="CU">CU</option>
+            <option value="Muslim">Muslim</option>
+            <option value="SDA">SDA</option>
+            <option value="YCS">YCS</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="update-leadership">Leadership</label>
+          <select id="update-leadership">
+            <option value="None">None</option>
+            <option value="Captain">Captain</option>
+            <option value="Sportsman">Sportsman</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="updateStudent()" class="bg-blue-500 text-white">Update Student</button>
+        <button type="button" onclick="closeUpdateForm()" class="bg-gray-500 text-white">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SheetJS for Excel backup/restore -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <script>
+    // Streams list
+    const streams = [
+      "Amherst","Berkley","Cambridge","Cape","Chicago","Columbia","Cornell","Dartmouth","Dayton",
+      "Duke","Edinburgh","Harvard","Hopkins","MIT","Michigan","Oxford","Pittsburgh","Princeton",
+      "Stanford","Yale","Zurich"
+    ].sort();
+
+    // Global variables for search optimization
+    let allStudents = [];
+    let filteredStudents = [];
+
+    // Check if student has pending leave requests
+    function checkPendingLeaves(admissionNo) {
+      const leaves = JSON.parse(localStorage.getItem("leaves")) || [];
+      const pendingLeaves = leaves.filter(leave => 
+        leave.admissionNo === admissionNo && leave.status === "pending"
+      );
+      
+      return pendingLeaves.length > 0;
+    }
+
+    // Get pending leave info for student
+    function getPendingLeaveInfo(admissionNo) {
+      const leaves = JSON.parse(localStorage.getItem("leaves")) || [];
+      const pendingLeave = leaves.find(leave => 
+        leave.admissionNo === admissionNo && leave.status === "pending"
+      );
+      
+      return pendingLeave;
+    }
+
+    // UI helpers
+    function showNotification(message, type = 'success') {
+      // Remove any existing notifications
+      const existingNotifications = document.querySelectorAll('.notification');
+      existingNotifications.forEach(notification => notification.remove());
+      
+      // Create new notification
+      const notification = document.createElement("div");
+      notification.className = `notification ${type}`;
+      notification.innerText = message;
+      document.body.appendChild(notification);
+      
+      // Show notification
+      notification.style.display = 'block';
+      
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        notification.style.display = 'none';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Settings modal
+    function openSettings() { 
+      document.getElementById('settings-modal').classList.remove('hidden'); 
+    }
+    
+    function closeSettings() { 
+      document.getElementById('settings-modal').classList.add('hidden'); 
+    }
+
+    // Backup to Excel
+    function backupData() {
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      if (students.length === 0) { 
+        showNotification("No data to backup!", "error"); 
+        return; 
+      }
+
+      try {
+        const ws = XLSX.utils.json_to_sheet(students.map(student => ({
+          "Admission No.": student.admissionNo,
+          "Name": student.name,
+          "Class": student.class,
+          "Status": student.status,
+          "Religious": student.religious,
+          "Leadership": student.leadership,
+          "Last Updated": student.lastUpdated
+        })));
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Students");
+        XLSX.writeFile(wb, `students_backup_${new Date().toISOString().split('T')[0]}.xlsx`);
+        showNotification("Excel backup created successfully!");
+      } catch (error) {
+        console.error("Backup failed:", error);
+        showNotification("Backup failed! Please try again.", "error");
+      }
+    }
+
+    // Restore from Excel (merge/update)
+    function restoreData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const ws = workbook.Sheets[workbook.SheetNames[0]];
+          const excelData = XLSX.utils.sheet_to_json(ws);
+
+          const existingStudents = JSON.parse(localStorage.getItem("students")) || [];
+          const admSet = new Set(existingStudents.map(s => s.admissionNo));
+          const newStudents = excelData.map(record => {
+            if (!record['Admission No.'] || !record['Name']) throw new Error('Missing required fields in Excel file');
+            return {
+              admissionNo: record['Admission No.'].toString().trim(),
+              name: record['Name'].toString().trim(),
+              class: (record['Class'] || '').toString().trim(),
+              status: (record['Status'] || 'Normal').toString().trim(),
+              religious: (record['Religious'] || 'None').toString().trim(),
+              leadership: (record['Leadership'] || 'None').toString().trim(),
+              lastUpdated: new Date().toISOString().split('T')[0]
+            };
+          });
+
+          const updatedStudents = existingStudents.map(student => {
+            const excelStudent = newStudents.find(s => s.admissionNo === student.admissionNo);
+            return excelStudent || student;
+          });
+
+          newStudents.forEach(student => {
+            if (!admSet.has(student.admissionNo)) updatedStudents.push(student);
+          });
+
+          localStorage.setItem("students", JSON.stringify(updatedStudents));
+          loadDashboardData();
+          showNotification("Data restored and merged successfully!");
+          closeSettings();
+        } catch (error) {
+          console.error("Restore failed:", error);
+          showNotification(`Restore failed: ${error.message}`, "error");
+        }
+      };
+      reader.onerror = function() { showNotification("Error reading file. Please try again.", "error"); };
+      reader.readAsArrayBuffer(file);
+    }
+
+    // Streams population
+    function populateStreamOptions() {
+      const classSelect = document.getElementById("class-select");
+      const streamSelect = document.getElementById("stream-select");
+      streamSelect.innerHTML = '<option value="">Select Stream</option>';
+      const selectedClass = classSelect.value;
+      if (selectedClass) streams.forEach(stream => {
+        const option = document.createElement("option");
+        option.value = stream;
+        option.textContent = stream;
+        streamSelect.appendChild(option);
+      });
+    }
+
+    function populateStudentStreamOptions() {
+      const studentStreamSelect = document.getElementById("student-stream");
+      studentStreamSelect.innerHTML = '<option value="">Select Stream</option>';
+      streams.forEach(stream => {
+        const option = document.createElement("option");
+        option.value = stream;
+        option.textContent = stream;
+        studentStreamSelect.appendChild(option);
+      });
+    }
+
+    function openAddStudentModal() {
+      document.getElementById("add-student-modal").classList.remove("hidden");
+      populateStudentStreamOptions();
+    }
+    
+    function closeAddStudentModal() { 
+      document.getElementById("add-student-modal").classList.add("hidden"); 
+    }
+
+    // Add student form
+    document.getElementById("add-student-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const admissionNo = document.getElementById("admission-no").value.trim();
+      const name = document.getElementById("student-name").value.trim();
+      const studentClass = document.getElementById("student-class").value;
+      const studentStream = document.getElementById("student-stream").value;
+      const status = document.getElementById("Status").value;
+      const religion = document.getElementById("religion").value;
+      const leadership = document.getElementById("leadership").value;
+      const lastUpdated = new Date().toISOString().split('T')[0];
+
+      if (!admissionNo || !name) { 
+        showNotification("Admission No. and Name are required.", "error"); 
+        return; 
+      }
+
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      
+      // Check if student already exists and has pending leaves
+      const existingStudent = students.find(s => s.admissionNo === admissionNo);
+      if (existingStudent && checkPendingLeaves(admissionNo)) {
+        const pendingLeave = getPendingLeaveInfo(admissionNo);
+        showNotification(`Cannot add student with this admission number. Student has a pending ${pendingLeave.leaveType} leave request that needs to be managed first.`, "error");
+        return;
+      }
+
+      if (existingStudent) {
+        showNotification("A student with this admission number already exists.", "error");
+        return;
+      }
+
+      const combinedClass = studentStream ? `${studentClass} ${studentStream}` : studentClass;
+      const newStudent = { 
+        admissionNo, 
+        name, 
+        class: combinedClass, 
+        stream: studentStream, 
+        status, 
+        religious: religion, 
+        leadership, 
+        lastUpdated 
+      };
+      students.push(newStudent);
+      localStorage.setItem("students", JSON.stringify(students));
+      loadDashboardData();
+      closeAddStudentModal();
+      showNotification("Student added successfully!");
+      this.reset();
+    });
+    
+    // Print class list
+    function printClassList() {
+      const selectedClass = document.getElementById("class-select").value;
+      const selectedStream = document.getElementById("stream-select").value;
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      
+      console.log("🔍 PRINT DEBUG:");
+      console.log("Selected Class:", selectedClass);
+      console.log("Selected Stream:", selectedStream);
+      console.log("All Students:", students);
+
+      // SIMPLE FILTERING - Just match the combined class string
+      let filtered = students.filter(student => {
+        const studentClass = student.class || '';
+        
+        // Case 1: Both class and stream selected
+        if (selectedClass && selectedStream) {
+          const targetClass = `${selectedClass} ${selectedStream}`;
+          return studentClass === targetClass || 
+                 studentClass.includes(selectedClass) && studentClass.includes(selectedStream);
+        }
+        // Case 2: Only class selected
+        else if (selectedClass && !selectedStream) {
+          return studentClass.startsWith(selectedClass);
+        }
+        // Case 3: Invalid selection
+        else {
+          showNotification("Please select a class to print the class list.", "error");
+          return false;
+        }
+      });
+
+      console.log("✅ Filtered Students:", filtered);
+
+      if (filtered.length === 0) {
+        // Show available classes for debugging
+        const allClasses = students.map(s => s.class).filter(c => c);
+        const uniqueClasses = [...new Set(allClasses)];
+        
+        let message = `No students found for ${selectedClass}${selectedStream ? ' ' + selectedStream : ''}.\n\n`;
+        message += `Available classes:\n`;
+        uniqueClasses.forEach(cls => {
+          message += `• ${cls}\n`;
+        });
+        alert(message);
+        return;
+      }
+
+      // Enhanced print layout
+      let printContent = `
+        <div style="text-align: center; margin-bottom: 25px; font-family: Arial, sans-serif;">
+          <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px; border-bottom: 2px solid #2c5aa0; padding-bottom: 15px;">
+            <img src="mangu_logo.jpg" alt="Mang'u High School Logo" 
+                 onerror="this.style.display='none'" 
+                 style="width: 70px; height: auto; margin-right: 20px;"/>
+            <div>
+              <h1 style="margin: 0; font-size: 22px; font-weight: bold; color: #2c5aa0;">MANG'U HIGH SCHOOL</h1>
+              <h2 style="margin: 8px 0; font-size: 18px; color: #333; font-weight: 600;">
+                ${selectedClass}${selectedStream ? ' ' + selectedStream : ''} CLASS LIST
+              </h2>
+              <div style="display: flex; justify-content: center; gap: 20px; font-size: 13px; color: #666;">
+                <span>Total Students: <strong>${filtered.length}</strong></span>
+                <span>Date: <strong>${new Date().toLocaleDateString()}</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 12px; margin: 0 auto;">
+          <thead>
+            <tr style="background-color: #2c5aa0; color: white;">
+              <th style="border: 1px solid #1e3d6f; padding: 12px 8px; text-align: center; width: 8%;">#</th>
+              <th style="border: 1px solid #1e3d6f; padding: 12px 8px; text-align: left; width: 20%;">ADMISSION NO.</th>
+              <th style="border: 1px solid #1e3d6f; padding: 12px 8px; text-align: left; width: 35%;">STUDENT NAME</th>
+              <th style="border: 1px solid #1e3d6f; padding: 12px 8px; text-align: left; width: 20%;">CLASS</th>
+              <th style="border: 1px solid #1e3d6f; padding: 12px 8px; text-align: left; width: 12%;">STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      // Sort by admission number
+      filtered.sort((a, b) => {
+        const aNum = parseInt(a.admissionNo) || a.admissionNo;
+        const bNum = parseInt(b.admissionNo) || b.admissionNo;
+        return aNum - bNum;
+      });
+
+      filtered.forEach((student, index) => {
+        const rowColor = index % 2 === 0 ? '#f8f9fa' : '#ffffff';
+        
+        printContent += `
+          <tr style="background-color: ${rowColor};">
+            <td style="border: 1px solid #dee2e6; padding: 10px 8px; text-align: center; font-weight: 500;">${index + 1}</td>
+            <td style="border: 1px solid #dee2e6; padding: 10px 8px; font-family: 'Courier New', monospace;">${student.admissionNo}</td>
+            <td style="border: 1px solid #dee2e6; padding: 10px 8px;">${student.name}</td>
+            <td style="border: 1px solid #dee2e6; padding: 10px 8px; font-weight: 500;">${student.class}</td>
+            <td style="border: 1px solid #dee2e6; padding: 10px 8px;">${student.status}</td>
+          </tr>
+        `;
+      });
+      
+      printContent += `
+          </tbody>
+        </table>
+        
+        <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd; text-align: center; font-size: 11px; color: #6c757d;">
+          <p>Generated on ${new Date().toLocaleDateString()} • Mang'u High School</p>
+        </div>
+      `;
+      
+      // Create print window
+      const printWindow = window.open('', '_blank', 'width=1000,height=700');
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>${selectedClass}${selectedStream ? ' ' + selectedStream : ''} Class List</title>
+            <style>
+              body { margin: 40px; font-family: Arial, sans-serif; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              th, td { border: 1px solid #dee2e6; padding: 8px; }
+              th { background-color: #2c5aa0; color: white; }
+              tr:nth-child(even) { background-color: #f8f9fa; }
+              @media print { body { margin: 0.25in; } .no-print { display: none; } }
+            </style>
+          </head>
+          <body>
+            ${printContent}
+            <div class="no-print" style="text-align: center; margin-top: 30px;">
+              <button onclick="window.print()" style="background: #2c5aa0; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">
+                Print
+              </button>
+              <button onclick="window.close()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px;">
+                Close
+              </button>
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+    }
+
+    // Delete student
+    function deleteStudent() {
+      const admissionNo = prompt("Enter Admission No. of student to delete:");
+      if (!admissionNo) return;
+      
+      // Check if student has pending leaves
+      if (checkPendingLeaves(admissionNo.trim())) {
+        const pendingLeave = getPendingLeaveInfo(admissionNo.trim());
+        alert(`Cannot delete student. This student has a pending ${pendingLeave.leaveType} leave request. Please approve or reject the leave request first in the Leave Reports page.`);
+        return;
+      }
+      
+      let students = JSON.parse(localStorage.getItem("students")) || [];
+      const initialLength = students.length;
+      students = students.filter(student => student.admissionNo !== admissionNo.trim());
+      localStorage.setItem("students", JSON.stringify(students));
+      if (students.length < initialLength) {
+        showNotification("Student deleted successfully!");
+        loadDashboardData();
+      } else {
+        showNotification("Student not found. Check Admission No.", "error");
+      }
+    }
+
+    // Update student UI
+    function openUpdateForm(admissionNo) {
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      const student = students.find(s => s.admissionNo === admissionNo);
+      if (!student) { 
+        showNotification("Student not found.", "error"); 
+        return; 
+      }
+      document.getElementById("update-admission-no").value = student.admissionNo;
+      document.getElementById("update-class").value = student.class.split(" ")[0] || student.class;
+      populateUpdateStreamOptions();
+      document.getElementById("update-stream").value = student.class.split(" ")[1] || "";
+      document.getElementById("update-status").value = student.status;
+      document.getElementById("update-religious").value = student.religious;
+      document.getElementById("update-leadership").value = student.leadership;
+      document.getElementById("update-student-form").classList.remove("hidden");
+    }
+
+    function closeUpdateForm() { 
+      document.getElementById("update-student-form").classList.add("hidden"); 
+    }
+
+    function populateUpdateStreamOptions() {
+      const updateClass = document.getElementById("update-class").value;
+      const updateStreamSelect = document.getElementById("update-stream");
+      updateStreamSelect.innerHTML = '<option value="">Select Stream</option>';
+      streams.forEach(stream => {
+        const option = document.createElement("option");
+        option.value = stream;
+        option.textContent = stream;
+        updateStreamSelect.appendChild(option);
+      });
+    }
+
+    document.getElementById("update-student-btn").addEventListener("click", function() {
+      const admissionNo = prompt("Enter Admission Number to Update:");
+      if (admissionNo) openUpdateForm(admissionNo.trim());
+    });
+
+    function updateStudent() {
+      const admissionNo = document.getElementById("update-admission-no").value;
+      const studentClass = document.getElementById("update-class").value;
+      const studentStream = document.getElementById("update-stream").value;
+      const status = document.getElementById("update-status").value;
+      const religious = document.getElementById("update-religious").value;
+      const leadership = document.getElementById("update-leadership").value;
+      const combinedClass = studentStream ? `${studentClass} ${studentStream}` : studentClass;
+
+      // Check if student has pending leave requests
+      if (checkPendingLeaves(admissionNo)) {
+        const pendingLeave = getPendingLeaveInfo(admissionNo);
+        alert(`Cannot update student status manually. This student has a pending ${pendingLeave.leaveType} leave request. Please approve or reject the leave request first in the Leave Reports page.`);
+        return;
+      }
+
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      const idx = students.findIndex(s => s.admissionNo === admissionNo);
+      if (idx !== -1) {
+        students[idx].class = combinedClass;
+        students[idx].status = status;
+        students[idx].religious = religious;
+        students[idx].leadership = leadership;
+        students[idx].lastUpdated = new Date().toISOString().split('T')[0];
+        localStorage.setItem("students", JSON.stringify(students));
+        loadDashboardData();
+        closeUpdateForm();
+        showNotification("Student information updated successfully!");
+      } else {
+        showNotification("Student not found.", "error");
+      }
+    }
+
+    // Search students - OPTIMIZED
+    let searchTimeout;
+    function searchStudent() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const query = document.getElementById("search-bar").value.toLowerCase().trim();
+        
+        if (!query) {
+          // If search is empty, show all students
+          filteredStudents = [...allStudents];
+        } else {
+          // Filter students based on query
+          filteredStudents = allStudents.filter(student => {
+            return (
+              student.admissionNo.toLowerCase().includes(query) ||
+              student.name.toLowerCase().includes(query) ||
+              student.class.toLowerCase().includes(query) ||
+              student.status.toLowerCase().includes(query) ||
+              student.religious.toLowerCase().includes(query) ||
+              student.leadership.toLowerCase().includes(query)
+            );
+          });
+        }
+        
+        // Update table with filtered results
+        renderStudentTable(filteredStudents);
+        
+        // Update stats based on filtered results
+        updateStats(filteredStudents);
+      }, 150); // Reduced debounce delay for better responsiveness
+    }
+
+    // Render student table (separate function for efficiency)
+    function renderStudentTable(students) {
+      const tableBody = document.getElementById("student-table");
+      
+      if (students.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: #6b7280;">
+              <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+              No students found matching your criteria
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tableBody.innerHTML = students.map(s => {
+        let statusClass = '';
+        if (s.status === 'Normal') statusClass = 'status-normal';
+        else if (s.status === 'Sick') statusClass = 'status-sick';
+        else if (s.status === 'Suspended') statusClass = 'status-suspended';
+        else if (s.status === 'Home') statusClass = 'status-home';
+        
+        return `
+          <tr>
+            <td>${s.admissionNo}</td>
+            <td>${s.name}</td>
+            <td>${s.class}</td>
+            <td><span class="status-badge ${statusClass}">${s.status}</span></td>
+            <td>${s.religious}</td>
+            <td>${s.leadership}</td>
+            <td>${s.lastUpdated}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // Check and update returned students automatically
+    function checkAndUpdateReturnedStudents() {
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      const leaves = JSON.parse(localStorage.getItem("leaves")) || [];
+      const today = new Date();
+      
+      let updatedCount = 0;
+      
+      students.forEach(student => {
+        // Find active approved leaves for this student that have expired
+        const expiredLeaves = leaves.filter(leave => 
+          leave.admissionNo === student.admissionNo && 
+          leave.status === "approved" &&
+          new Date(leave.endDate) < today
+        );
+        
+        // If student has expired approved leaves and is not already Normal, set status back to Normal
+        if (expiredLeaves.length > 0 && student.status !== "Normal") {
+          student.status = "Normal";
+          student.lastUpdated = today.toISOString().split('T')[0];
+          updatedCount++;
+          
+          // Optional: Update leave status to indicate automatic return
+          expiredLeaves.forEach(leave => {
+            leave.autoReturned = true;
+            leave.returnDate = today.toISOString();
+          });
+        }
+      });
+      
+      if (updatedCount > 0) {
+        localStorage.setItem("students", JSON.stringify(students));
+        localStorage.setItem("leaves", JSON.stringify(leaves)); // Save updated leaves
+        console.log(`Auto-updated ${updatedCount} students to Normal status`);
+      }
+    }
+
+    // Load dashboard data
+    function loadDashboardData() {
+      allStudents = JSON.parse(localStorage.getItem("students")) || [];
+      
+      // Sort students by admission number
+      allStudents.sort((a, b) => {
+        const an = parseInt(a.admissionNo) || a.admissionNo;
+        const bn = parseInt(b.admissionNo) || b.admissionNo;
+        return an - bn;
+      });
+
+      // Initially show all students
+      filteredStudents = [...allStudents];
+      renderStudentTable(filteredStudents);
+      updateStats(filteredStudents);
+    }
+
+    // Update stats - Show total students (excluding suspended/sick/home) and sent home count
+    function updateStats(students = []) {
+      // Exclude suspended, sick, and home students from the total count
+      const totalStudents = students.filter(s => s.status !== 'Suspended' && s.status !== 'Home' && s.status !== 'Sick').length;
+      
+      // Count students sent home (includes both medical leave "Sick" and personal leave "Home")
+      const sentHome = students.filter(s => s.status === 'Home' || s.status === 'Sick').length;
+      
+      // Update stat boxes
+      document.getElementById("total-students").textContent = totalStudents;
+      document.getElementById("sent-home-count").textContent = sentHome;
+    }
+
+    // Logout simply redirects to the login page (login handled in index.html)
+    function logout() {
+      // clear any auth/session markers you use (don't remove student data)
+      localStorage.removeItem('loggedInUser'); // adjust key name if you use a different one
+      sessionStorage.clear();
+
+      // redirect to login and prevent back-navigation
+      window.location.replace('index.html');
+    }
+
+    // Check authentication and role
+    if (localStorage.getItem('loggedIn') !== 'true' || localStorage.getItem('userRole') !== 'admin') {
+      window.location.href = 'index.html';
+    }
+
+    // Update logout function in your existing dashboard
+    function logout() {
+      localStorage.removeItem('loggedIn');
+      localStorage.removeItem('userRole');
+      window.location.href = 'index.html';
+    }
+
+    // Initialization on page load (dashboard only)
+    window.addEventListener('DOMContentLoaded', function() {
+      // Seed sample data only if none exists
+      if (!localStorage.getItem("students")) {
+        const initialStudents = [
+          {
+            admissionNo: "12345",
+            name: "John Doe",
+            class: "Form 2 Cambridge",
+            stream: "Cambridge",
+            status: "Normal",
+            religious: "CU",
+            leadership: "None",
+            lastUpdated: "2023-10-02"
+          },
+          {
+            admissionNo: "12346",
+            name: "Jane Smith",
+            class: "Form 2 Cambridge",
+            stream: "Cambridge",
+            status: "Sick",
+            religious: "Muslim",
+            leadership: "Captain",
+            lastUpdated: "2023-10-02"
+          },
+          {
+            admissionNo: "12347",
+            name: "Mike Johnson",
+            class: "Form 3 Amherst",
+            stream: "Amherst",
+            status: "Suspended",
+            religious: "CU",
+            leadership: "None",
+            lastUpdated: "2023-10-02"
+          }
+        ];
+        localStorage.setItem("students", JSON.stringify(initialStudents));
+      }
+
+      // Check for returned students
+      checkAndUpdateReturnedStudents();
+      
+      loadDashboardData();
+
+      // Add Enter key listener to search bar
+      document.getElementById("search-bar").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+          searchStudent();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

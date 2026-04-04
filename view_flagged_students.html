@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Flagged Students - Mang'u High School</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="android-chrome-512x512" type="image/png" sizes="32x32" href="favicon_io/android-chrome-512x512.png">
+  <link rel="android-chrome-192x192" href="favicon_io/android-chrome-192x192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #1b263b;
+      color: white;
+      padding: 25px;
+      text-align: center;
+      border-bottom: 4px solid #0077b6;
+    }
+    .content {
+      padding: 30px;
+    }
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #0077b6;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #0077b6;
+      margin-bottom: 5px;
+    }
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    .search-container {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 25px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-input {
+      flex: 1;
+      min-width: 250px;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background-color: #0077b6;
+      color: white;
+    }
+    .btn-primary:hover {
+      background-color: #005b8a;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+    }
+    .btn-success:hover {
+      background-color: #218838;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #e2e8f0;
+      padding: 14px;
+      text-align: left;
+    }
+    th {
+      background-color: #1b263b;
+      color: white;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+    }
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    tr:hover {
+      background-color: #e8f4fc;
+    }
+    .comments-cell {
+      max-width: 300px;
+      word-wrap: break-word;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+    .empty-state i {
+      font-size: 3rem;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+    .resolved-badge {
+      background-color: #28a745;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .pending-badge {
+      background-color: #ffc107;
+      color: #212529;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+    }
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1b263b;
+    }
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 25px;
+    }
+    @media (max-width: 768px) {
+      .search-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .search-input {
+        min-width: auto;
+      }
+      .action-buttons {
+        flex-direction: column;
+      }
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="text-3xl font-bold">Flagged Students</h1>
+      <p class="mt-2 opacity-90">Review and manage student behavior reports</p>
+    </div>
+    
+    <div class="content">
+      <div class="flex justify-between items-center mb-6">
+        <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+          <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </button>
+        <button class="btn btn-primary" onclick="window.location.href='flag_student.html'">
+          <i class="fas fa-flag"></i> Flag New Student
+        </button>
+      </div>
+
+      <!-- Statistics Cards -->
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-number" id="total-flagged">0</div>
+          <div class="stat-label">Total Flagged</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pending-flags">0</div>
+          <div class="stat-label">Pending Resolution</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="resolved-flags">0</div>
+          <div class="stat-label">Resolved</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="unique-students">0</div>
+          <div class="stat-label">Unique Students</div>
+        </div>
+      </div>
+
+      <!-- Search and Filters -->
+      <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search by Admission No., Name, or Teacher..." class="search-input"/>
+        <select id="status-filter" class="search-input" style="max-width: 200px;">
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="resolved">Resolved</option>
+        </select>
+        <button id="search-button" class="btn btn-primary">
+          <i class="fas fa-search"></i> Search
+        </button>
+        <button id="clear-search" class="btn btn-secondary">
+          <i class="fas fa-times"></i> Clear
+        </button>
+      </div>
+
+      <!-- Flagged Students Table -->
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Admission No.</th>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Comments</th>
+              <th>Teacher</th>
+              <th>Date & Time</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="flagged-students-table">
+            <!-- Dynamic content will be inserted here -->
+          </tbody>
+        </table>
+        
+        <!-- Empty State -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <i class="fas fa-flag"></i>
+          <h3 class="text-xl font-semibold mb-2">No Flagged Students</h3>
+          <p class="mb-4">There are no flagged students to display.</p>
+          <button class="btn btn-primary" onclick="window.location.href='flag_student.html'">
+            <i class="fas fa-flag"></i> Flag a Student
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resolve Confirmation Modal -->
+  <div id="resolve-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Mark as Resolved</h3>
+        <button class="close-modal" onclick="closeResolveModal()">&times;</button>
+      </div>
+      <p>Are you sure you want to mark this flag as resolved?</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeResolveModal()">Cancel</button>
+        <button class="btn btn-success" id="confirm-resolve">Yes, Mark Resolved</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Flag</h3>
+        <button class="close-modal" onclick="closeDeleteModal()">&times;</button>
+      </div>
+      <p>Are you sure you want to delete this flag? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allFlags = [];
+    let currentResolveIndex = -1;
+    let currentDeleteIndex = -1;
+
+    // Load flagged students when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      loadFlaggedStudents();
+      document.getElementById('search-input').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+          filterStudents();
+        }
+      });
+      document.getElementById('search-button').addEventListener('click', filterStudents);
+      document.getElementById('clear-search').addEventListener('click', clearSearch);
+      document.getElementById('status-filter').addEventListener('change', filterStudents);
+    });
+
+    // Function to load flagged students from localStorage
+    function loadFlaggedStudents() {
+      allFlags = JSON.parse(localStorage.getItem("flags")) || [];
+      updateStatistics(allFlags);
+      renderFlaggedStudents(allFlags);
+    }
+
+    // Update statistics
+    function updateStatistics(flags) {
+      const totalFlagged = flags.length;
+      const pendingFlags = flags.filter(flag => !flag.resolved).length;
+      const resolvedFlags = flags.filter(flag => flag.resolved).length;
+      const uniqueStudents = new Set(flags.map(flag => flag.admissionNo)).size;
+
+      document.getElementById('total-flagged').textContent = totalFlagged;
+      document.getElementById('pending-flags').textContent = pendingFlags;
+      document.getElementById('resolved-flags').textContent = resolvedFlags;
+      document.getElementById('unique-students').textContent = uniqueStudents;
+    }
+
+    // Render flagged students in the table
+    function renderFlaggedStudents(flags) {
+      const tableBody = document.getElementById("flagged-students-table");
+      const emptyState = document.getElementById("empty-state");
+      
+      if (flags.length === 0) {
+        tableBody.innerHTML = '';
+        emptyState.style.display = 'block';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
+      
+      // Sort by date (newest first)
+      flags.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+      
+      tableBody.innerHTML = flags.map((flag, index) => {
+        const statusBadge = flag.resolved 
+          ? '<span class="resolved-badge"><i class="fas fa-check-circle mr-1"></i> Resolved</span>'
+          : '<span class="pending-badge"><i class="fas fa-clock mr-1"></i> Pending</span>';
+        
+        return `
+          <tr>
+            <td>${flag.admissionNo}</td>
+            <td>${flag.name}</td>
+            <td>${flag.class}</td>
+            <td class="comments-cell">${flag.comments}</td>
+            <td>${flag.teacherName}</td>
+            <td>${new Date(flag.dateTime).toLocaleString()}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <div class="action-buttons">
+                ${!flag.resolved ? `
+                  <button class="btn btn-success" onclick="openResolveModal(${index})" title="Mark as resolved">
+                    <i class="fas fa-check"></i>
+                  </button>
+                ` : ''}
+                <button class="btn btn-danger" onclick="openDeleteModal(${index})" title="Delete flag">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // Filter students based on search input and status
+    function filterStudents() {
+      const searchValue = document.getElementById("search-input").value.toLowerCase();
+      const statusValue = document.getElementById("status-filter").value;
+      
+      let filteredFlags = allFlags.filter(flag => {
+        const matchesSearch = 
+          flag.admissionNo.toLowerCase().includes(searchValue) || 
+          flag.name.toLowerCase().includes(searchValue) ||
+          flag.teacherName.toLowerCase().includes(searchValue);
+        
+        const matchesStatus = 
+          statusValue === 'all' || 
+          (statusValue === 'pending' && !flag.resolved) ||
+          (statusValue === 'resolved' && flag.resolved);
+        
+        return matchesSearch && matchesStatus;
+      });
+
+      renderFlaggedStudents(filteredFlags);
+    }
+
+    // Clear search and show all flags
+    function clearSearch() {
+      document.getElementById("search-input").value = '';
+      document.getElementById("status-filter").value = 'all';
+      renderFlaggedStudents(allFlags);
+    }
+
+    // Modal functions for resolve action
+    function openResolveModal(index) {
+      currentResolveIndex = index;
+      document.getElementById('resolve-modal').style.display = 'flex';
+    }
+
+    function closeResolveModal() {
+      document.getElementById('resolve-modal').style.display = 'none';
+      currentResolveIndex = -1;
+    }
+
+    // Modal functions for delete action
+    function openDeleteModal(index) {
+      currentDeleteIndex = index;
+      document.getElementById('delete-modal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('delete-modal').style.display = 'none';
+      currentDeleteIndex = -1;
+    }
+
+    // Confirm resolve action
+    document.getElementById('confirm-resolve').addEventListener('click', function() {
+      if (currentResolveIndex !== -1) {
+        const flag = allFlags[currentResolveIndex];
+        
+        // Mark flag as resolved
+        allFlags[currentResolveIndex].resolved = true;
+        localStorage.setItem("flags", JSON.stringify(allFlags));
+
+        // Update student status back to "Normal" when flag is resolved
+        const students = JSON.parse(localStorage.getItem("students")) || [];
+        const studentIndex = students.findIndex(s => s.admissionNo === flag.admissionNo);
+        if (studentIndex !== -1) {
+          students[studentIndex].status = "Normal";
+          students[studentIndex].lastUpdated = new Date().toISOString().split('T')[0];
+          localStorage.setItem("students", JSON.stringify(students));
+        }
+
+        loadFlaggedStudents();
+        closeResolveModal();
+      }
+    });
+
+    // Confirm delete action
+    document.getElementById('confirm-delete').addEventListener('click', function() {
+      if (currentDeleteIndex !== -1) {
+        allFlags.splice(currentDeleteIndex, 1);
+        localStorage.setItem("flags", JSON.stringify(allFlags));
+        loadFlaggedStudents();
+        closeDeleteModal();
+      }
+    });
+  </script>
+</body>
+</html>

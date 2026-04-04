@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="android-chrome-512x512" type="image/png" sizes="32x32" href="favicon_io/android-chrome-512x512.png">
+  <link rel="android-chrome-192x192" href="favicon_io/android-chrome-192x192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Welcome to the MHS website, your go-to resource for information and updates.">
+  <meta name="keywords" content="MHS website, MHS, education, resources, dining hall, dashboard">
+  <title>Mang'u High School</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="android-chrome-512x512" type="image/png" sizes="32x32" href="favicon_io/android-chrome-512x512.png">
+  <link rel="android-chrome-192x192" sizes="180x180" href="favicon_io/android-chrome-192x192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  
+  <style>
+    :root {
+      --primary-color: #1a56db;
+      --secondary-color: #1e429f;
+      --accent-color: #f59e0b;
+      --text-light: #f8fafc;
+      --text-dark: #1e293b;
+      --bg-light: #f1f5f9;
+      --bg-dark: #0f172a;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text-light);
+    }
+    
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    
+    .login-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .login-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+    
+    .logo-container {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--accent-color);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .school-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 0.75rem;
+      color: var(--text-light);
+      letter-spacing: 0.5px;
+    }
+    
+    .login-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--text-light);
+    }
+    
+    .role-indicator {
+      text-align: center;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .role-indicator.teacher {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .role-indicator.admin {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-light);
+    }
+    
+    .input-container {
+      position: relative;
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+    
+    .form-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .password-toggle:hover {
+      color: var(--accent-color);
+    }
+    
+    .login-button {
+      width: 100%;
+      padding: 0.875rem;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .login-button:hover {
+      background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .login-button:active {
+      transform: translateY(0);
+    }
+    
+    .login-button:disabled {
+      background: #64748b;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      background: var(--error-color);
+      color: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification.success {
+      background: var(--success-color);
+    }
+    
+    .notification-icon {
+      font-size: 1.25rem;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 2rem 1.5rem;
+      }
+      
+      .logo {
+        width: 80px;
+        height: 80px;
+      }
+      
+      .school-name {
+        font-size: 1.25rem;
+      }
+      
+      .login-title {
+        font-size: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .login-card {
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Form -->
+  <div class="login-container">
+    <div class="login-card">
+      <div class="logo-container">
+        <img class="logo" src="mangu_logo.jpg" alt="Mang'u High School Logo" />
+        <h1 class="school-name">Mang'u High School</h1>
+      </div>
+      
+      <h2 class="login-title">Welcome Back</h2>
+      
+      <div class="role-indicator" id="roleIndicator">
+        Enter your credentials to continue
+      </div>
+      
+      <form id="loginForm" onsubmit="return validateLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="username">Username</label>
+          <div class="input-container">
+            <i class="fas fa-user input-icon"></i>
+            <input class="form-input" id="username" required type="text" placeholder="Enter your username" autocomplete="username"/>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-container">
+            <i class="fas fa-lock input-icon"></i>
+            <input class="form-input" id="password" required type="password" placeholder="Enter your password" autocomplete="current-password"/>
+            <button type="button" class="password-toggle" id="passwordToggle">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        
+        <button class="login-button" type="submit" id="loginButton">
+          <span id="buttonText">Login</span>
+          <div id="buttonSpinner" class="hidden">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
+        </button>
+      </form>
+      
+      <div class="footer">
+        <p>© 2025 Mang'u High School. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <i class="fas fa-exclamation-circle notification-icon"></i>
+    <span id="notificationMessage">Invalid username or password</span>
+  </div>
+  
+  <script>
+    // DOM Elements
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const passwordToggle = document.getElementById('passwordToggle');
+    const loginButton = document.getElementById('loginButton');
+    const buttonText = document.getElementById('buttonText');
+    const buttonSpinner = document.getElementById('buttonSpinner');
+    const notification = document.getElementById('notification');
+    const notificationMessage = document.getElementById('notificationMessage');
+    const roleIndicator = document.getElementById('roleIndicator');
+    
+    // Credentials (hidden from users)
+    const credentials = {
+      'teacher': { password: 'Teacher@1925', role: 'teacher', redirect: 'teacher_dashboard.html' },
+      'Admin': { password: 'Mangu@1925', role: 'admin', redirect: 'dashboard.html' }
+    };
+    
+    // Update role indicator based on username input
+    usernameInput.addEventListener('input', function() {
+      const username = this.value.trim();
+      
+      if (username.toLowerCase() === 'teacher') {
+        roleIndicator.textContent = 'Teacher Access - Roll Call, Flag Students, Print Class Lists';
+        roleIndicator.className = 'role-indicator teacher';
+      } else if (username.toLowerCase() === 'admin') {
+        roleIndicator.textContent = 'Administrator Access - Full System Access';
+        roleIndicator.className = 'role-indicator admin';
+      } else {
+        roleIndicator.textContent = 'Enter your credentials to continue';
+        roleIndicator.className = 'role-indicator';
+      }
+    });
+    
+    // Toggle password visibility
+    passwordToggle.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      // Toggle eye icon
+      const icon = this.querySelector('i');
+      icon.classList.toggle('fa-eye');
+      icon.classList.toggle('fa-eye-slash');
+    });
+    
+    // Show notification
+    function showNotification(message, isSuccess = false) {
+      notificationMessage.textContent = message;
+      
+      // Update notification style based on type
+      if (isSuccess) {
+        notification.classList.add('success');
+        notification.querySelector('.notification-icon').className = 'fas fa-check-circle notification-icon';
+      } else {
+        notification.classList.remove('success');
+        notification.querySelector('.notification-icon').className = 'fas fa-exclamation-circle notification-icon';
+      }
+      
+      // Show notification
+      notification.classList.add('show');
+      
+      // Hide after 5 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
+    }
+    
+    // Validate login
+    function validateLogin(event) {
+      event.preventDefault();
+      
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+      
+      // Show loading state
+      buttonText.classList.add('hidden');
+      buttonSpinner.classList.remove('hidden');
+      loginButton.disabled = true;
+      
+      // Simulate API call delay
+      setTimeout(() => {
+        const userCreds = credentials[username];
+        
+        if (userCreds && userCreds.password === password) {
+          // Successful login
+          const role = userCreds.role;
+          const redirectUrl = userCreds.redirect;
+          
+          showNotification(`Login successful! Redirecting to ${role} dashboard...`, true);
+          
+          // Store login state and redirect
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("userRole", role);
+          
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1500);
+        } else {
+          // Failed login
+          showNotification('Invalid username or password. Please try again.');
+          
+          // Reset form
+          passwordInput.value = '';
+          
+          // Reset button state
+          buttonText.classList.remove('hidden');
+          buttonSpinner.classList.add('hidden');
+          loginButton.disabled = false;
+          
+          // Focus on username field
+          usernameInput.focus();
+        }
+      }, 1500); // Simulate network delay
+      
+      return false;
+    }
+    
+    // If already logged in, redirect immediately
+    if (localStorage.getItem('loggedIn') === 'true') {
+      const role = localStorage.getItem('userRole');
+      if (role === 'teacher') {
+        window.location.href = 'teacher_dashboard.html';
+      } else {
+        window.location.href = 'dashboard.html';
+      }
+    }
+    
+    // Add utility class for hiding elements
+    const style = document.createElement('style');
+    style.textContent = '.hidden { display: none !important; }';
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

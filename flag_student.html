@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Flag Student - Mang'u High School</title>
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+  <link rel="android-chrome-512x512" type="image/png" sizes="32x32" href="favicon_io/android-chrome-512x512.png">
+  <link rel="android-chrome-192x192" href="favicon_io/android-chrome-192x192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #1b263b;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 4px solid #0077b6;
+    }
+    .form-container {
+      padding: 30px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: #0077b6;
+      box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.1);
+    }
+    .form-input:read-only {
+      background-color: #f8f9fa;
+      color: #6c757d;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+      width: 100%;
+    }
+    .btn:hover {
+      background-color: #005b8a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      margin-top: 10px;
+    }
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    .student-info {
+      background-color: #e8f4fc;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-left: 4px solid #0077b6;
+    }
+    .student-info p {
+      margin: 5px 0;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      color: #0077b6;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 20px;
+      transition: color 0.3s;
+    }
+    .back-link:hover {
+      color: #005b8a;
+    }
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 6px;
+      color: white;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .notification.success {
+      background-color: #28a745;
+    }
+    .notification.error {
+      background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="text-2xl font-bold">Flag Student</h1>
+      <p class="mt-2 opacity-90">Report student behavior or issues</p>
+    </div>
+    
+    <div class="form-container">
+      <a href="teacher_dashboard.html" class="back-link">
+        <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+      </a>
+      
+      <form id="flag-student-form">
+        <div class="form-group">
+          <label class="form-label" for="admission-no">
+            <i class="fas fa-id-card mr-2"></i>Admission Number
+          </label>
+          <input type="text" id="admission-no" class="form-input" required placeholder="Enter student admission number"/>
+          <p class="text-sm text-gray-500 mt-1">Start typing to auto-fill student details</p>
+        </div>
+        
+        <div id="student-info-container" class="student-info" style="display: none;">
+          <h3 class="font-bold text-lg mb-2">Student Information</h3>
+          <p><strong>Name:</strong> <span id="student-name-display">-</span></p>
+          <p><strong>Class:</strong> <span id="student-class-display">-</span></p>
+          <p><strong>Status:</strong> <span id="student-status-display">-</span></p>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="comments">
+            <i class="fas fa-comment-alt mr-2"></i>Comments / Reason for Flagging
+          </label>
+          <textarea id="comments" class="form-textarea" rows="4" required placeholder="Provide details about the issue..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="teacher-name">
+            <i class="fas fa-user mr-2"></i>Teacher's Name
+          </label>
+          <input type="text" id="teacher-name" class="form-input" required placeholder="Enter your full name"/>
+        </div>
+        
+        <button type="submit" class="btn">
+          <i class="fas fa-flag mr-2"></i> Submit Flag
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // Check authentication
+    if (localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
+    // Show notification function
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.style.display = 'block';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 4000);
+    }
+
+    // Event listener for admission number input with debouncing
+    let searchTimeout;
+    document.getElementById("admission-no").addEventListener("input", function() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const admissionNo = this.value.trim();
+        const students = JSON.parse(localStorage.getItem("students")) || [];
+        const student = students.find(s => s.admissionNo === admissionNo);
+
+        const studentInfoContainer = document.getElementById("student-info-container");
+        
+        if (student) {
+          // Populate the student info if the student is found
+          document.getElementById("student-name-display").textContent = student.name;
+          document.getElementById("student-class-display").textContent = student.class;
+          document.getElementById("student-status-display").textContent = student.status || 'Normal';
+          studentInfoContainer.style.display = 'block';
+        } else {
+          // Hide the student info if no student is found
+          studentInfoContainer.style.display = 'none';
+        }
+      }, 300);
+    });
+
+    // Form submission handler
+    document.getElementById("flag-student-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const admissionNo = document.getElementById("admission-no").value.trim();
+      const comments = document.getElementById("comments").value.trim();
+      const teacherName = document.getElementById("teacher-name").value.trim();
+      const dateTime = new Date().toISOString();
+
+      // Validate form
+      if (!admissionNo || !comments || !teacherName) {
+        showNotification("Please fill in all required fields.", "error");
+        return;
+      }
+
+      // Retrieve the students array from localStorage
+      const students = JSON.parse(localStorage.getItem("students")) || [];
+      const student = students.find(s => s.admissionNo === admissionNo);
+
+      if (student) {
+        const flagging = {
+          admissionNo: student.admissionNo,
+          name: student.name,
+          class: student.class,
+          status: student.status || 'Normal',
+          comments,
+          teacherName,
+          dateTime,
+          resolved: false
+        };
+        
+        // Retrieve existing flags from localStorage or initialize an empty array
+        const flags = JSON.parse(localStorage.getItem("flags")) || [];
+        flags.push(flagging);
+
+        // Save the updated flags array back to localStorage
+        localStorage.setItem("flags", JSON.stringify(flags));
+
+        // Update student status to "Suspended" when flagged
+        const studentIndex = students.findIndex(s => s.admissionNo === admissionNo);
+        if (studentIndex !== -1) {
+          students[studentIndex].status = "Suspended";
+          students[studentIndex].lastUpdated = new Date().toISOString().split('T')[0];
+          localStorage.setItem("students", JSON.stringify(students));
+        }
+
+        showNotification("Student flagged successfully!");
+        
+        // Reset form
+        this.reset();
+        document.getElementById("student-info-container").style.display = 'none';
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+          window.location.href = "teacher_dashboard.html";
+        }, 1500);
+      } else {
+        showNotification("Student not found. Please check the admission number.", "error");
+      }
+    });
+
+    // Focus on admission number field when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('admission-no').focus();
+    });
+  </script>
+</body>
+</html>

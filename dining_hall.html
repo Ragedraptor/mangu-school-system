@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dining Hall Seating - Mang'u High School</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1b263b 0%, #2a3f5f 100%);
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .view-btn {
+      transition: all 0.3s ease;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .view-btn.active {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .table-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+      border-left: 4px solid #0077b6;
+      overflow: hidden;
+    }
+
+    .table-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .table-header {
+      background: linear-gradient(135deg, #0077b6 0%, #0096c7 100%);
+      color: white;
+      padding: 15px;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .student-row:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    .student-row:hover {
+      background-color: #e8f4fc;
+    }
+
+    .stats-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      border-left: 4px solid #4CAF50;
+    }
+
+    .stats-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1b263b;
+    }
+
+    .stats-label {
+      font-size: 0.9rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .hall-badge {
+      background: #4CAF50;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .hall-badge.old {
+      background: #ff9800;
+    }
+
+    .hall-badge.new {
+      background: #2196f3;
+    }
+
+    .lane-indicator {
+      background: #8b5cf6;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .shuffle-btn {
+      background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    }
+
+    .shuffle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .captain-note,
+    .shuffle-info {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      text-align: center;
+      font-weight: 500;
+      color: #92400e;
+    }
+
+    .shuffle-info {
+      background: #e6f3ff;
+      border-color: #0077b6;
+      color: #1e40af;
+    }
+
+    .sort-indicator {
+      background: #10b981;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    /* Resizable modal styles */
+    #resizable-modal {
+      resize: both;
+      overflow: auto;
+      min-width: 420px;
+      min-height: 420px;
+      max-width: 85vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #resizable-modal .p-6 {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    /* Custom scrollbar */
+    .class-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .class-grid::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .class-grid::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+
+    .print-option.selected {
+      border-color: #0077b6 !important;
+      background-color: #f0f9ff;
+      box-shadow: 0 2px 8px rgba(0, 119, 182, 0.2);
+    }
+
+    .class-item {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .class-item:hover {
+      background: #eef2ff;
+      border-color: #0077b6;
+    }
+
+    .class-item input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #0077b6;
+    }
+
+    .class-item.selected-class {
+      background: #e0f2fe;
+      border-color: #0077b6;
+    }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    /* Print styles for page breaks */
+    @media print {
+      .print-page-break {
+        page-break-before: always;
+      }
+      .print-page-break:first-child {
+        page-break-before: avoid;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <div class="container mx-auto p-4">
+    <header class="header text-white p-6 flex items-center justify-between mb-6">
+      <div class="flex items-center space-x-4">
+        <img class="h-16 w-16 rounded-lg shadow-lg" src="mangu_logo.jpg" alt="Mang'u High School Logo" onerror="this.style.display='none'">
+        <div>
+          <h1 class="text-3xl font-bold">Dining Hall Seating Arrangement</h1>
+          <p class="text-blue-100 mt-1">Mang'u High School - Organized Student Seating</p>
+        </div>
+      </div>
+      <button onclick="window.location.href='dashboard.html'" class="text-white p-3 rounded-full hover:bg-blue-700 transition-all bg-blue-600 shadow-md" title="Dashboard">
+        <i class="fas fa-home text-xl"></i>
+      </button>
+    </header>
+
+    <div class="captain-note">
+      <i class="fas fa-info-circle mr-2"></i>
+      Note: Students with "Captain" leadership are not included in dining hall arrangements. Students are sorted by admission number within classes.
+    </div>
+    <div class="shuffle-info">
+      <i class="fas fa-random mr-2"></i>
+      Shuffle button rearranges classes and dining halls between tables (students remain sorted by admission number within tables)
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="stats-card">
+        <div class="stats-number" id="total-students">0</div>
+        <div class="stats-label">Total Students</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-number" id="general-students">0</div>
+        <div class="stats-label">General Students</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-number" id="muslim-students">0</div>
+        <div class="stats-label">Muslim Students</div>
+      </div>
+      <div class="stats-card">
+        <div class="stats-number" id="sports-students">0</div>
+        <div class="stats-label">Sports Students</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="mb-6 bg-white rounded-xl shadow-md p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-gray-800">Select View</h2>
+        <button id="shuffle-btn" class="shuffle-btn">
+          <i class="fas fa-random mr-2"></i> Shuffle Classes & DH
+        </button>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <button id="show-students" class="view-btn bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition active">
+          <i class="fas fa-users mr-2"></i> General Students
+        </button>
+        <button id="show-muslims" class="view-btn bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">
+          <i class="fas fa-mosque mr-2"></i> Muslims
+        </button>
+        <button id="show-sportsmen" class="view-btn bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition">
+          <i class="fas fa-running mr-2"></i> Sportsmen
+        </button>
+        <button id="print-button" class="view-btn bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition">
+          <i class="fas fa-print mr-2"></i> Print Arrangement
+        </button>
+      </div>
+    </div>
+
+    <!-- Current View Info -->
+    <div class="mb-4 bg-white rounded-lg shadow p-4">
+      <h2 id="current-view-title" class="text-xl font-semibold text-gray-800">General Students Arrangement <span class="sort-indicator">Sorted by Admission No.</span></h2>
+      <p id="current-view-description" class="text-gray-600">Showing all general students arranged by class and table assignment.</p>
+    </div>
+
+    <section id="arrangement-section" class="mb-6">
+      <div id="class-tables" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <footer class="mt-8 text-center text-gray-300 py-4 border-t border-gray-700">
+      © 2025 Mang'u High School. All rights reserved.
+    </footer>
+  </div>
+
+  <!-- RESIZABLE PRINT MODAL with Class Selection -->
+  <div id="print-modal" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-60 hidden z-50 p-4">
+    <div id="resizable-modal" class="modal-content bg-white rounded-xl shadow-2xl overflow-hidden" style="width: 560px; min-width: 420px; min-height: 420px; max-width: 85vw; max-height: 85vh; resize: both; display: flex; flex-direction: column;">
+      <!-- Modal Header with Drag Handle -->
+      <div id="modal-header" class="bg-gradient-to-r from-blue-700 to-indigo-800 px-5 py-3 cursor-move flex justify-between items-center flex-shrink-0">
+        <h2 class="text-xl font-bold text-white flex items-center">
+          <i class="fas fa-print mr-2"></i> Print Arrangement
+        </h2>
+        <button id="close-modal-btn" class="text-white hover:text-gray-200 transition">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+      
+      <div class="p-5 flex-1 overflow-y-auto">
+        <p class="text-gray-600 mb-3 text-sm">Select category to print. <strong>Each class prints on a separate page.</strong></p>
+        
+        <!-- Category Selection -->
+        <div class="mb-4">
+          <label class="block text-gray-800 font-semibold mb-2 text-sm">Select Category:</label>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="print-option text-center p-2 rounded-lg border-2 border-gray-200 cursor-pointer transition hover:border-blue-400" data-type="students">
+              <i class="fas fa-users text-blue-500 text-lg mb-1 block"></i>
+              <span class="font-medium text-xs">General Students</span>
+            </div>
+            <div class="print-option text-center p-2 rounded-lg border-2 border-gray-200 cursor-pointer transition hover:border-blue-400" data-type="muslims">
+              <i class="fas fa-mosque text-green-500 text-lg mb-1 block"></i>
+              <span class="font-medium text-xs">Muslim Students</span>
+            </div>
+            <div class="print-option text-center p-2 rounded-lg border-2 border-gray-200 cursor-pointer transition hover:border-blue-400" data-type="sportsmen">
+              <i class="fas fa-running text-yellow-500 text-lg mb-1 block"></i>
+              <span class="font-medium text-xs">Sportsmen</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class Selection Area (only for general students) -->
+        <div id="class-selection-area" class="mb-4 hidden">
+          <div class="flex justify-between items-center mb-2">
+            <label class="block text-gray-800 font-semibold text-sm">Select Classes to Print:</label>
+            <div class="flex gap-2">
+              <button id="select-all-classes" class="text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-0.5 rounded transition">All</button>
+              <button id="deselect-all-classes" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-0.5 rounded transition">None</button>
+            </div>
+          </div>
+          <div id="class-list-container" class="class-grid border rounded-lg p-2 bg-gray-50" style="max-height: 220px; overflow-y: auto;">
+            <!-- Classes will be populated here -->
+          </div>
+          <p class="text-xs text-gray-500 mt-2">
+            <i class="fas fa-info-circle"></i> Each selected class prints on a separate page. Mixed Classes prints separately if selected.
+          </p>
+        </div>
+
+        <div class="flex space-x-3 mt-4">
+          <button id="confirm-print" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition flex-1 font-semibold text-sm">
+            <i class="fas fa-print mr-1"></i> Print (Separate Pages)
+          </button>
+          <button id="close-modal" class="bg-gray-300 text-gray-800 px-5 py-2 rounded-lg hover:bg-gray-400 transition flex-1 font-semibold text-sm">
+            Cancel
+          </button>
+        </div>
+      </div>
+      
+      <!-- Resize handle indicator -->
+      <div class="text-right text-gray-400 text-xs px-3 pb-1 flex-shrink-0">
+        <i class="fas fa-expand-alt"></i> Drag corner to resize
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Configuration Constants
+    const CONFIG = {
+      TABLE_CAPACITY: 16,
+      OLD_DH_LIMIT: 80,
+      MUSLIM_LANE_TABLES: 4,
+      SPORTS_LANE_TABLES: 3
+    };
+
+    // Global Variables
+    let students = [];
+    let currentView = 'students';
+    let selectedPrintCategory = 'students';
+    let selectedClassesForPrint = new Set();
+    let currentArrangement = { general: [], muslims: [], sportsmen: [] };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const storedData = localStorage.getItem('students');
+        if (!storedData) {
+          alert('No student data found! Redirecting to dashboard...');
+          window.location.href = 'dashboard.html';
+          return;
+        }
+        students = JSON.parse(storedData);
+        updateStatistics();
+        generateArrangements();
+        displayStudents();
+        setupEventListeners();
+        makeModalDraggable();
+      } catch (error) {
+        console.error(error);
+        alert('Error loading student data! Redirecting...');
+        window.location.href = 'dashboard.html';
+      }
+    });
+
+    function updateStatistics() {
+      const total = students.length;
+      const general = students.filter(s => s.religious !== 'Muslim' && s.leadership !== 'Sportsman' && s.leadership !== 'Captain').length;
+      const muslim = students.filter(s => s.religious === 'Muslim' && s.leadership !== 'Captain').length;
+      const sports = students.filter(s => s.leadership === 'Sportsman' && s.leadership !== 'Captain').length;
+      document.getElementById('total-students').textContent = total;
+      document.getElementById('general-students').textContent = general;
+      document.getElementById('muslim-students').textContent = muslim;
+      document.getElementById('sports-students').textContent = sports;
+    }
+
+    function generateArrangements() {
+      const generalPool = students.filter(s => s.religious !== 'Muslim' && s.leadership !== 'Sportsman' && s.leadership !== 'Captain');
+      const groupedByClass = {};
+      generalPool.forEach(s => {
+        const cls = s.class;
+        if (!groupedByClass[cls]) groupedByClass[cls] = [];
+        groupedByClass[cls].push(s);
+      });
+
+      let tableCounter = 1;
+      const leftoverPool = [];
+      const generalTables = [];
+
+      for (const className in groupedByClass) {
+        let group = groupedByClass[className];
+        group.sort((a, b) => (parseInt(a.admissionNo) || 0) - (parseInt(b.admissionNo) || 0));
+        while (group.length >= CONFIG.TABLE_CAPACITY) {
+          const hall = tableCounter <= CONFIG.OLD_DH_LIMIT ? 'Old DH' : 'New DH';
+          generalTables.push({
+            tableNo: tableCounter++,
+            class: className,
+            students: group.splice(0, CONFIG.TABLE_CAPACITY),
+            hall
+          });
+        }
+        if (group.length > 0) leftoverPool.push(...group);
+      }
+
+      leftoverPool.sort((a, b) => (parseInt(a.admissionNo) || 0) - (parseInt(b.admissionNo) || 0));
+      while (leftoverPool.length) {
+        const hall = tableCounter <= CONFIG.OLD_DH_LIMIT ? 'Old DH' : 'New DH';
+        generalTables.push({
+          tableNo: tableCounter++,
+          class: 'Mixed Classes',
+          students: leftoverPool.splice(0, CONFIG.TABLE_CAPACITY),
+          hall
+        });
+      }
+
+      let muslimPool = students.filter(s => s.religious === 'Muslim' && s.leadership !== 'Captain');
+      muslimPool.sort((a, b) => (parseInt(a.admissionNo) || 0) - (parseInt(b.admissionNo) || 0));
+      const muslimTables = [];
+      let muslimIdx = 1, lane = 1;
+      for (let i = 0; i < muslimPool.length; i += CONFIG.TABLE_CAPACITY) {
+        muslimTables.push({
+          tableNo: muslimIdx++,
+          class: 'Muslim Students',
+          students: muslimPool.slice(i, i + CONFIG.TABLE_CAPACITY),
+          hall: 'Muslim Lane',
+          lane: lane
+        });
+        if (muslimIdx % CONFIG.MUSLIM_LANE_TABLES === 1) lane++;
+      }
+
+      let sportsPool = students.filter(s => s.leadership === 'Sportsman' && s.leadership !== 'Captain');
+      sportsPool.sort((a, b) => (parseInt(a.admissionNo) || 0) - (parseInt(b.admissionNo) || 0));
+      const sportsTables = [];
+      let sportsIdx = 1, sportsLane = 1;
+      for (let i = 0; i < sportsPool.length; i += CONFIG.TABLE_CAPACITY) {
+        sportsTables.push({
+          tableNo: sportsIdx++,
+          class: 'Sportsmen',
+          students: sportsPool.slice(i, i + CONFIG.TABLE_CAPACITY),
+          hall: 'Sports Lane',
+          lane: sportsLane
+        });
+        if (sportsIdx % CONFIG.SPORTS_LANE_TABLES === 1) sportsLane++;
+      }
+
+      currentArrangement = { general: generalTables, muslims: muslimTables, sportsmen: sportsTables };
+    }
+
+    function shuffleArrangement() {
+      if (currentView === 'students') {
+        let shuffled = [...currentArrangement.general];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        let newNumber = 1;
+        const reshuffled = shuffled.map(t => ({ ...t, tableNo: newNumber++, hall: newNumber <= CONFIG.OLD_DH_LIMIT ? 'Old DH' : 'New DH' }));
+        currentArrangement.general = reshuffled;
+        displayStudents();
+      } else if (currentView === 'muslims') {
+        let shuffled = [...currentArrangement.muslims];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        let newNum = 1, l = 1;
+        const updated = shuffled.map(t => {
+          const newT = { ...t, tableNo: newNum++ };
+          if (newNum % CONFIG.MUSLIM_LANE_TABLES === 1 && newNum > 1) l++;
+          newT.lane = l;
+          return newT;
+        });
+        currentArrangement.muslims = updated;
+        displayMuslims();
+      } else if (currentView === 'sportsmen') {
+        let shuffled = [...currentArrangement.sportsmen];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        let newNum = 1, l = 1;
+        const updated = shuffled.map(t => {
+          const newT = { ...t, tableNo: newNum++ };
+          if (newNum % CONFIG.SPORTS_LANE_TABLES === 1 && newNum > 1) l++;
+          newT.lane = l;
+          return newT;
+        });
+        currentArrangement.sportsmen = updated;
+        displaySportsmen();
+      }
+      const btn = document.getElementById('shuffle-btn');
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-check mr-2"></i> Shuffled!';
+      btn.style.background = 'linear-gradient(135deg, #10b981 0%, #34d399 100%)';
+      setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 1500);
+    }
+
+    function createTable(title, studentList, tableNumber = null, hall = null, lane = null) {
+      const div = document.createElement('div');
+      div.className = "table-card";
+      const header = document.createElement('div');
+      header.className = "table-header";
+      let headerText = title;
+      if (tableNumber) headerText += ` - Table ${tableNumber}`;
+      if (hall) headerText += ` <span class="hall-badge ${hall === 'Old DH' ? 'old' : hall === 'New DH' ? 'new' : ''}">${hall}</span>`;
+      if (lane) headerText += ` <span class="lane-indicator">Lane ${lane}</span>`;
+      header.innerHTML = `<h3 class="font-bold text-lg">${headerText}</h3>`;
+      div.appendChild(header);
+      const table = document.createElement('table');
+      table.className = "min-w-full border-collapse";
+      table.innerHTML = `
+        <thead><tr class="bg-gray-100"><th class="py-3 px-4 border-b text-left font-semibold">Admission No.</th><th class="py-3 px-4 border-b text-left font-semibold">Name</th><th class="py-3 px-4 border-b text-left font-semibold">Class</th></tr></thead>
+        <tbody>${studentList.map(s => `<tr class="student-row"><td class="py-3 px-4 border-b font-mono">${s.admissionNo}</td><td class="py-3 px-4 border-b">${escapeHtml(s.name)}</td><td class="py-3 px-4 border-b">${s.class}</td></tr>`).join('')}</tbody>
+      `;
+      div.appendChild(table);
+      return div;
+    }
+
+    function escapeHtml(str) { 
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
+    }
+
+    function displayStudents() {
+      currentView = 'students';
+      updateViewInfo('General Students Arrangement', 'Showing all general students arranged by class and table assignment. Sorted by admission number. Captains excluded.');
+      const container = document.getElementById('class-tables');
+      container.innerHTML = '';
+      currentArrangement.general.forEach(g => container.appendChild(createTable(g.class, g.students, g.tableNo, g.hall)));
+    }
+    
+    function displayMuslims() {
+      currentView = 'muslims';
+      updateViewInfo('Muslim Students Arrangement', 'Muslim students in dedicated lanes.');
+      const container = document.getElementById('class-tables');
+      container.innerHTML = '';
+      currentArrangement.muslims.forEach(m => container.appendChild(createTable(m.class, m.students, m.tableNo, m.hall, m.lane)));
+    }
+    
+    function displaySportsmen() {
+      currentView = 'sportsmen';
+      updateViewInfo('Sportsmen Arrangement', 'Sportsmen in dedicated lanes.');
+      const container = document.getElementById('class-tables');
+      container.innerHTML = '';
+      currentArrangement.sportsmen.forEach(s => container.appendChild(createTable(s.class, s.students, s.tableNo, s.hall, s.lane)));
+    }
+    
+    function updateViewInfo(title, desc) {
+      const titleEl = document.getElementById('current-view-title');
+      titleEl.textContent = title + ' ';
+      const badge = document.createElement('span');
+      badge.className = 'sort-indicator';
+      badge.textContent = 'Sorted by Admission No.';
+      titleEl.appendChild(badge);
+      document.getElementById('current-view-description').textContent = desc;
+    }
+
+    function populateClassList() {
+      const classSet = new Set();
+      currentArrangement.general.forEach(table => { classSet.add(table.class); });
+      const classList = Array.from(classSet).sort();
+      const container = document.getElementById('class-list-container');
+      container.innerHTML = '';
+      
+      classList.forEach(cls => {
+        const div = document.createElement('div');
+        div.className = 'class-item';
+        const isChecked = selectedClassesForPrint.has(cls);
+        div.innerHTML = `
+          <input type="checkbox" value="${cls.replace(/"/g, '&quot;')}" id="class_${cls.replace(/\s/g, '_')}" ${isChecked ? 'checked' : ''}>
+          <label for="class_${cls.replace(/\s/g, '_')}" class="flex-1 cursor-pointer font-medium text-sm">${cls}</label>
+        `;
+        const checkbox = div.querySelector('input');
+        checkbox.addEventListener('change', (e) => {
+          if (e.target.checked) { selectedClassesForPrint.add(cls); } 
+          else { selectedClassesForPrint.delete(cls); }
+          div.classList.toggle('selected-class', e.target.checked);
+        });
+        if (isChecked) div.classList.add('selected-class');
+        container.appendChild(div);
+      });
+    }
+
+    function printSeparatePages() {
+      const category = selectedPrintCategory;
+      let tablesGroupedByClass = new Map();
+      let printTitle = '';
+      
+      if (category === 'students') {
+        if (selectedClassesForPrint.size === 0) { alert('Please select at least one class to print.'); return false; }
+        printTitle = 'General Students Arrangement';
+        const filteredTables = currentArrangement.general.filter(table => selectedClassesForPrint.has(table.class));
+        filteredTables.forEach(table => {
+          if (!tablesGroupedByClass.has(table.class)) tablesGroupedByClass.set(table.class, []);
+          tablesGroupedByClass.get(table.class).push(table);
+        });
+      } else if (category === 'muslims') {
+        printTitle = 'Muslim Students Arrangement';
+        tablesGroupedByClass.set('Muslim Students', currentArrangement.muslims);
+      } else {
+        printTitle = 'Sportsmen Arrangement';
+        tablesGroupedByClass.set('Sportsmen', currentArrangement.sportsmen);
+      }
+      
+      const date = new Date().toLocaleString();
+      const win = window.open('', '_blank', 'width=1200,height=800,toolbar=yes,scrollbars=yes');
+      win.document.write(`
+        <html><head><title>${printTitle} - Mang'u High School</title>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font-family: 'Inter', Arial, sans-serif; padding: 20px; background: white; }
+          .page { page-break-after: always; margin-bottom: 20px; }
+          .page:last-child { page-break-after: auto; }
+          .header { display: flex; align-items: center; gap: 20px; border-bottom: 3px solid #1b263b; padding-bottom: 15px; margin-bottom: 20px; }
+          .logo { height: 70px; border-radius: 8px; }
+          h1 { color: #1b263b; font-size: 24px; margin: 0; }
+          .class-title { background: linear-gradient(135deg, #0077b6 0%, #0096c7 100%); color: white; padding: 12px 16px; border-radius: 8px; margin: 20px 0 15px 0; font-size: 20px; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+          th, td { border: 1px solid #ddd; padding: 10px 12px; text-align: left; }
+          th { background: #f1f5f9; font-weight: 600; }
+          tr:nth-child(even) { background-color: #f9fafb; }
+          .hall-badge, .lane-indicator { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; margin-left: 8px; color: white; }
+          .hall-badge.old { background: #ff9800; }
+          .hall-badge.new { background: #2196f3; }
+          .lane-indicator { background: #8b5cf6; }
+          .note { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 20px; font-size: 13px; color: #92400e; }
+          .date-info { color: #6b7280; font-size: 12px; margin-top: 5px; }
+          .table-header-info { margin: 10px 0 5px 0; font-weight: 600; color: #0077b6; }
+        </style></head>
+        <body>
+      `);
+      
+      let isFirst = true;
+      for (let [className, tables] of tablesGroupedByClass.entries()) {
+        win.document.write(`<div class="${!isFirst ? 'page' : ''}">`);
+        win.document.write(`
+          <div class="header"><img src="mangu_logo.jpg" class="logo" onerror="this.style.display='none'"><div><h1>Mang'u High School - ${printTitle}</h1><div class="date-info">Generated: ${date}</div></div></div>
+          <div class="note"><strong>📋 ${className}</strong> - Students sorted by admission number. Captains are excluded.</div>
+        `);
+        tables.forEach(table => {
+          win.document.write(`<div class="table-header-info">📍 Table ${table.tableNo} ${table.hall ? `<span class="hall-badge ${table.hall === 'Old DH' ? 'old' : table.hall === 'New DH' ? 'new' : ''}">${table.hall}</span>` : ''} ${table.lane ? `<span class="lane-indicator">Lane ${table.lane}</span>` : ''}</div>
+            <table><thead><tr><th width="25%">Admission No.</th><th width="50%">Student Name</th><th width="25%">Class</th></tr></thead><tbody>`);
+          table.students.forEach(s => { win.document.write(`<tr><td>${s.admissionNo}</td><td>${escapeHtml(s.name)}</td><td>${s.class}</td></tr>`); });
+          win.document.write(`</tbody></table>`);
+        });
+        win.document.write(`</div>`);
+        isFirst = false;
+      }
+      win.document.write(`</body></html>`);
+      win.document.close();
+      win.print();
+      return true;
+    }
+
+    function makeModalDraggable() {
+      const modal = document.getElementById('resizable-modal');
+      const header = document.getElementById('modal-header');
+      let isDragging = false, startX, startY, startLeft, startTop;
+      header.addEventListener('mousedown', (e) => {
+        if (e.target.closest('button')) return;
+        isDragging = true;
+        startX = e.clientX; startY = e.clientY;
+        const rect = modal.getBoundingClientRect();
+        const parentRect = modal.parentElement.getBoundingClientRect();
+        startLeft = rect.left - parentRect.left;
+        startTop = rect.top - parentRect.top;
+        modal.style.position = 'absolute';
+        modal.style.margin = '0';
+        modal.style.left = startLeft + 'px';
+        modal.style.top = startTop + 'px';
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+        e.preventDefault();
+      });
+      function onMouseMove(e) { if(isDragging){ modal.style.left = (startLeft + e.clientX - startX) + 'px'; modal.style.top = (startTop + e.clientY - startY) + 'px'; } }
+      function onMouseUp() { isDragging = false; document.removeEventListener('mousemove', onMouseMove); document.removeEventListener('mouseup', onMouseUp); }
+    }
+
+    function setupEventListeners() {
+      document.getElementById('show-students').addEventListener('click', () => { setActive('show-students'); displayStudents(); });
+      document.getElementById('show-muslims').addEventListener('click', () => { setActive('show-muslims'); displayMuslims(); });
+      document.getElementById('show-sportsmen').addEventListener('click', () => { setActive('show-sportsmen'); displaySportsmen(); });
+      document.getElementById('print-button').addEventListener('click', openPrintModal);
+      document.getElementById('close-modal').addEventListener('click', () => document.getElementById('print-modal').classList.add('hidden'));
+      document.getElementById('close-modal-btn').addEventListener('click', () => document.getElementById('print-modal').classList.add('hidden'));
+      document.getElementById('shuffle-btn').addEventListener('click', shuffleArrangement);
+
+      const categoryOptions = document.querySelectorAll('.print-option');
+      categoryOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          categoryOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedPrintCategory = opt.getAttribute('data-type');
+          const classArea = document.getElementById('class-selection-area');
+          if (selectedPrintCategory === 'students') {
+            classArea.classList.remove('hidden');
+            populateClassList();
+          } else {
+            classArea.classList.add('hidden');
+          }
+        });
+      });
+      
+      document.getElementById('confirm-print').addEventListener('click', () => {
+        document.getElementById('print-modal').classList.add('hidden');
+        printSeparatePages();
+      });
+      document.getElementById('select-all-classes').addEventListener('click', () => {
+        document.querySelectorAll('#class-list-container input').forEach(cb => { cb.checked = true; selectedClassesForPrint.add(cb.value); cb.closest('.class-item')?.classList.add('selected-class'); });
+      });
+      document.getElementById('deselect-all-classes').addEventListener('click', () => {
+        document.querySelectorAll('#class-list-container input').forEach(cb => { cb.checked = false; selectedClassesForPrint.delete(cb.value); cb.closest('.class-item')?.classList.remove('selected-class'); });
+      });
+      document.querySelector('.print-option[data-type="students"]').classList.add('selected');
+    }
+
+    function setActive(btnId) {
+      document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(btnId).classList.add('active');
+    }
+
+    function openPrintModal() {
+      selectedPrintCategory = 'students';
+      selectedClassesForPrint.clear();
+      document.querySelectorAll('.print-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector('.print-option[data-type="students"]').classList.add('selected');
+      document.getElementById('class-selection-area').classList.remove('hidden');
+      populateClassList();
+      document.querySelectorAll('#class-list-container input').forEach(cb => { cb.checked = true; selectedClassesForPrint.add(cb.value); cb.closest('.class-item')?.classList.add('selected-class'); });
+      document.getElementById('print-modal').classList.remove('hidden');
+      const modal = document.getElementById('resizable-modal');
+      modal.style.position = '';
+      modal.style.left = '';
+      modal.style.top = '';
+      modal.style.margin = '';
+    }
+  </script>
+</body>
+
+</html>

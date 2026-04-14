@@ -526,7 +526,7 @@
       <!-- Class Selection Dropdown -->
       <select id="class-select" onchange="populateStreamOptions()">
         <option value="">Select Class</option>
-        <option value="Form 2">Form 2</option>
+        <option value="Grade 10">Grade 10</option>
         <option value="Form 3">Form 3</option>
         <option value="Form 4">Form 4</option>
       </select>
@@ -620,7 +620,7 @@
           <div class="form-group">
             <label for="student-class">Class</label>
             <select id="student-class" required>
-              <option value="Form 2">Form 2</option>
+              <option value="Grade 10">Grade 10</option>
               <option value="Form 3">Form 3</option>
               <option value="Form 4">Form 4</option>
             </select>
@@ -683,7 +683,7 @@
         <div class="form-group">
           <label for="update-class">Class</label>
           <select id="update-class" onchange="populateUpdateStreamOptions()">
-            <option value="Form 2">Form 2</option>
+            <option value="Grade 10">Grade 10</option>
             <option value="Form 3">Form 3</option>
             <option value="Form 4">Form 4</option>
           </select>
@@ -1360,43 +1360,6 @@
 
     // Initialization on page load (dashboard only)
     window.addEventListener('DOMContentLoaded', function() {
-      // Seed sample data only if none exists
-      if (!localStorage.getItem("students")) {
-        const initialStudents = [
-          {
-            admissionNo: "12345",
-            name: "John Doe",
-            class: "Form 2 Cambridge",
-            stream: "Cambridge",
-            status: "Normal",
-            religious: "CU",
-            leadership: "None",
-            lastUpdated: "2023-10-02"
-          },
-          {
-            admissionNo: "12346",
-            name: "Jane Smith",
-            class: "Form 2 Cambridge",
-            stream: "Cambridge",
-            status: "Sick",
-            religious: "Muslim",
-            leadership: "Captain",
-            lastUpdated: "2023-10-02"
-          },
-          {
-            admissionNo: "12347",
-            name: "Mike Johnson",
-            class: "Form 3 Amherst",
-            stream: "Amherst",
-            status: "Suspended",
-            religious: "CU",
-            leadership: "None",
-            lastUpdated: "2023-10-02"
-          }
-        ];
-        localStorage.setItem("students", JSON.stringify(initialStudents));
-      }
-
       // Check for returned students
       checkAndUpdateReturnedStudents();
       

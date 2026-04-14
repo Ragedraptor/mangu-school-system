@@ -706,15 +706,6 @@
         document.getElementById("end-date").min = this.value;
       });
 
-      // Initialize sample data if not exists
-      if (!localStorage.getItem("students")) {
-        const students = [
-          { admissionNo: "26506", name: "KAROBIA HANS MBURU", class: "Form 3 Edinburgh", status: "Normal", lastUpdated: new Date().toISOString().split('T')[0] },
-          { admissionNo: "26528", name: "NAJIBU BIKORWAMUKAMA", class: "Form 3 Cornell", status: "Normal", lastUpdated: new Date().toISOString().split('T')[0] },
-          { admissionNo: "27796", name: "FABIAN DMITRY MEDVEDEV", class: "Form 2 Columbia", status: "Normal", lastUpdated: new Date().toISOString().split('T')[0] }
-        ];
-        localStorage.setItem("students", JSON.stringify(students));
-      }
     });
   </script>
 </body>
